@@ -1,4 +1,4 @@
-package com.synapsecode.backend.service;
+package com.synapsecode.backend.service.impl;
 
 
 import com.synapsecode.backend.dto.*;
@@ -10,6 +10,9 @@ import com.synapsecode.backend.mapper.UserMapper;
 import com.synapsecode.backend.repository.TokenRepository;
 import com.synapsecode.backend.repository.UserRepository;
 import com.synapsecode.backend.security.JwtUtils;
+import com.synapsecode.backend.service.AuthenticationService;
+import com.synapsecode.backend.service.EmailService;
+import com.synapsecode.backend.service.TokenService;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
