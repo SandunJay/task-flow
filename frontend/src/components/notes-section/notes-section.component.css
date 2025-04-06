@@ -29,11 +29,11 @@
 }
 
 /* Card hover effects */
-.rounded-xl {
+.notes-container .rounded-xl {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.rounded-xl:hover {
+.notes-container .rounded-xl:hover {
   transform: translateY(-2px);
 }
 

@@ -5,10 +5,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-:host-context(.dark-theme) .hover\:shadow-md:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
 /* Breathing animation for status indicators */
 .w-2.h-2.rounded-full {
   animation: pulse 2s infinite ease-in-out;
@@ -57,10 +53,6 @@
   opacity: 1;
 }
 
-:host-context(.dark-theme) .bg-white.rounded-xl::before {
-  background: linear-gradient(to right, #4d6fff, #00c9a7);
-}
-
 /* Responsive adjustments */
 @media (max-width: 640px) {
   .overview-container {
@@ -82,23 +74,6 @@
   }
 }
 
-/* Dark mode adjustments */
-:host-context(.dark-theme) .bg-gray-800 {
-  background-color: #242729;
-}
-
-:host-context(.dark-theme) .bg-gray-700 {
-  background-color: #2f3336;
-}
-
-:host-context(.dark-theme) .bg-gray-750 {
-  background-color: #282c2f;
-}
-
-:host-context(.dark-theme) .bg-gray-650 {
-  background-color: #32363a;
-}
-
 /* Add smooth transitions for dark/light theme changes */
 .overview-container * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -117,20 +92,11 @@
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Dark theme styles applied through host-context */
-:host-context(.dark-theme) .overview-card {
-  @apply bg-gray-800;
-}
-
 /* Enhanced hover effects */
 .overview-card:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-:host-context(.dark-theme) .overview-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Improve mobile scrolling experience */
@@ -150,35 +116,6 @@
 @keyframes heightAnimation {
   from { height: 0%; }
   to { height: var(--height); }
-}
-
-/* More explicit dark mode styles */
-:host-context(.dark-theme) .text-gray-900 {
-  color: #e0e0e0 !important;
-}
-
-:host-context(.dark-theme) .text-gray-600 {
-  color: #a0a0a0 !important;
-}
-
-:host-context(.dark-theme) .text-gray-700 {
-  color: #c0c0c0 !important;
-}
-
-:host-context(.dark-theme) .bg-gray-100 {
-  background-color: #2f3336 !important;
-}
-
-:host-context(.dark-theme) .bg-gray-50 {
-  background-color: #3a3d41 !important;
-}
-
-:host-context(.dark-theme) .bg-gray-200 {
-  background-color: #3a3d41 !important;
-}
-
-:host-context(.dark-theme) .border-gray-100 {
-  border-color: #3a3d41 !important;
 }
 
 /* Smooth transitions for all elements */
@@ -219,6 +156,62 @@ button:focus {
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5) !important;
 }
 
-:host-context(.dark-theme) button:focus {
-  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5) !important;
+/* Specific styles for the overview section */
+
+/* Card hover effects */
+.rounded-xl {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rounded-xl:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Chart container styles */
+.chart-container {
+  height: 300px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+}
+
+/* Component-specific styles for the overview section */
+
+/* Card-specific animation */
+.overview-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overview-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Project health progress bars animation */
+.progress-bar-animate {
+  transition: width 1s ease-in-out;
+}
+
+/* Activity item hover effect */
+.activity-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.dark .activity-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Media-specific adjustments */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+  
+  .overview-container {
+    padding-bottom: 4rem;
+  }
 }
