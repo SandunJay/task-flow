@@ -30,11 +30,31 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isSubmitting = true;
       
-      // Here you would call your authentication service to log in the user
-      // For now, we'll just simulate a successful login
+      // Simulate successful login
       setTimeout(() => {
+        // Store authentication info in localStorage
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify({
+          email: this.loginForm.value.email,
+          name: 'Test User',
+          role: 'user'
+        }));
+        
+        if (this.loginForm.value.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+        
         this.isSubmitting = false;
-        this.router.navigate(['/dashboard']);
+        console.log('Login successful, redirecting to dashboard...');
+        
+        // Navigate to dashboard
+        this.router.navigate(['/dashboard']).then(success => {
+          if (!success) {
+            console.error('Navigation to dashboard failed');
+            // Try project-board as fallback
+            this.router.navigate(['/project-board']);
+          }
+        });
       }, 1000);
     } else {
       this.loginForm.markAllAsTouched();
