@@ -1,0 +1,56 @@
+<div class="home-container" [class.sidebar-collapsed]="collapsed">
+  <!-- Responsive sidebar -->
+  <div class="sidebar-wrapper" [class.collapsed]="collapsed">
+    <app-sidebar></app-sidebar>
+    
+    <!-- Collapse toggle button -->
+    <button class="collapse-toggle" (click)="toggleSidebar()">
+      <svg xmlns="http://www.w3.org/2000/svg" 
+           [class.rotate-180]="collapsed"
+           class="h-5 w-5 transition-transform duration-300" 
+           viewBox="0 0 20 20" 
+           fill="currentColor">
+        <path fill-rule="evenodd" 
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" 
+              clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  
+  <div class="content-area">
+    <!-- Header -->
+    <div class="header-wrapper">
+      <app-header></app-header>
+    </div>
+    
+    <div class="main-content">
+      <!-- Main content with project board -->
+      <div class="board-section">
+        <app-project-board></app-project-board>
+      </div>
+      
+      <!-- Right sidebar with team members -->
+      <div class="team-sidebar">
+        <div class="team-header">
+          <h2>Team Members</h2>
+          <span class="member-count">{{ teamMembers.length }}</span>
+        </div>
+        
+        <div class="team-list">
+          <app-team-member *ngFor="let member of teamMembers" 
+                         [member]="member">
+          </app-team-member>
+        </div>
+        
+        <div class="team-actions">
+          <button class="add-member-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            Add Team Member
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
