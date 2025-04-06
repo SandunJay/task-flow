@@ -1,5 +1,5 @@
 // components/task-card/task-card.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
@@ -41,6 +41,15 @@ interface Task {
         style({ opacity: 0, transform: 'translateY(10px)' }),
         animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
+    ]),
+    trigger('pulseAnimation', [
+      state('inactive', style({
+        transform: 'scale(1)'
+      })),
+      state('active', style({
+        transform: 'scale(1.2)'
+      })),
+      transition('inactive <=> active', animate('300ms ease-in-out'))
     ])
   ],
   template: `
@@ -92,6 +101,16 @@ interface Task {
           </div>
         </div>
       </div>
+      
+      <!-- View details right arrow button -->
+      <button class="view-details-button" 
+              (click)="viewTaskDetails($event)"
+              [@pulseAnimation]="detailsBtnState"
+              (mouseenter)="detailsBtnState = 'active'"
+              (mouseleave)="detailsBtnState = 'inactive'">
+        <i class="arrow-icon">→</i>
+        <span class="view-text">View Details</span>
+      </button>
     </div>
   `,
   styles: [`
@@ -104,6 +123,8 @@ interface Task {
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      margin-bottom: 12px;
+      width: 100%;
     }
     
     .task-card::after {
@@ -336,6 +357,7 @@ interface Task {
     @media (max-width: 576px) {
       .task-card {
         padding: 12px;
+        margin-bottom: 10px;
       }
       
       .task-title {
@@ -359,12 +381,77 @@ interface Task {
         width: 20px;
         height: 20px;
       }
+      
+      .view-details-button {
+        padding-top: 6px;
+        margin-top: 8px;
+      }
+      
+      .view-text {
+        font-size: 12px;
+      }
+    }
+    
+    /* Improved mobile layout for task cards inside horizontal scrolls */
+    @media (max-width: 768px) {
+      .task-footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+    
+    /* Right-aligned view details button */
+    .view-details-button {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 12px;
+      border-top: 1px dashed #e0e0e0;
+      padding-top: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      background: none;
+      border: none;
+      width: 100%;
+      color: #4d6fff;
+    }
+    
+    .view-details-button:hover {
+      background-color: #f0f2f5;
+    }
+    
+    :host-context(.dark-theme) .view-details-button {
+      border-color: #3a3d41;
+      color: #82a0ff;
+    }
+    
+    :host-context(.dark-theme) .view-details-button:hover {
+      background-color: #3a3d41;
+    }
+    
+    .arrow-icon {
+      font-size: 16px;
+      margin-left: 6px;
+      transition: transform 0.3s ease;
+    }
+    
+    .view-details-button:hover .arrow-icon {
+      transform: translateX(3px);
+    }
+    
+    .view-text {
+      font-size: 13px;
+      font-weight: 500;
     }
   `]
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+  @Output() viewDetailsEvent = new EventEmitter<number>();
+  
   cardState = 'normal';
+  detailsBtnState = 'inactive';
   
   metrics = [
     { key: 'comments', icon: 'comment-icon', symbol: '💬' },
@@ -379,5 +466,10 @@ export class TaskCardComponent {
       case 'views': return this.task.views;
       default: return 0;
     }
+  }
+  
+  viewTaskDetails(event: Event): void {
+    event.stopPropagation();
+    this.viewDetailsEvent.emit(this.task.id);
   }
 }

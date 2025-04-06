@@ -1,0 +1,300 @@
+<div class="notes-container">
+  <!-- Notes Header -->
+  <div [@fadeIn] class="mb-6">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Notes</h1>
+    <p class="text-gray-600 dark:text-gray-400">Organize your thoughts and keep track of project details</p>
+  </div>
+
+  <!-- Search and Filters -->
+  <div [@fadeIn] class="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
+    <!-- Search Input -->
+    <div class="relative flex-grow">
+      <input 
+        type="text" 
+        [(ngModel)]="searchText"
+        (ngModelChange)="filterNotes()"
+        (focus)="isSearchFocused = true"
+        (blur)="isSearchFocused = false"
+        placeholder="Search notes" 
+        class="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+      >
+      <div class="absolute top-0 left-0 h-full flex items-center pl-3 text-gray-500 dark:text-gray-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+      <button 
+        *ngIf="searchText" 
+        (click)="clearSearch()" 
+        class="absolute top-0 right-0 h-full px-3 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Filter Dropdown -->
+    <div class="flex-shrink-0 relative group">
+      <button class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors flex items-center">
+        <span class="mr-1">{{ selectedFilter === 'all' ? 'All Notes' : selectedFilter }}</span>
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-100 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+        <div class="py-1">
+          <a (click)="updateFilter('all')" class="cursor-pointer block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-750" [class.bg-indigo-50]="selectedFilter === 'all'">All Notes</a>
+          <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+          <a *ngFor="let label of labelOptions" (click)="updateFilter(label)" class="cursor-pointer block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-750" [class.bg-indigo-50]="selectedFilter === label">
+            {{ label }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Note Button -->
+    <button 
+      (click)="toggleForm()" 
+      class="flex-shrink-0 px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all duration-200 transform hover:-translate-y-1 shadow-md flex items-center"
+    >
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Add Note
+    </button>
+  </div>
+
+  <!-- New Note Form -->
+  <div *ngIf="isFormVisible" [@fadeIn] class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-6 transition-all duration-300">
+    <!-- Form Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">New Note</h2>
+      <button (click)="toggleForm()" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Form Fields -->
+    <div class="space-y-4">
+      <input 
+        type="text" 
+        [(ngModel)]="newNote.title"
+        placeholder="Title" 
+        class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+      >
+      <textarea 
+        [(ngModel)]="newNote.content"
+        placeholder="Content" 
+        class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 min-h-[100px]"
+      ></textarea>
+
+      <!-- Note Color Selection -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Note Color</label>
+        <div class="flex gap-2 flex-wrap">
+          <button 
+            *ngFor="let color of noteColors" 
+            (click)="changeNoteColor(color)" 
+            class="w-6 h-6 rounded-full border border-gray-300 dark:border-gray-600 transition-transform duration-200 hover:scale-110"
+            [class]="color"
+            [class.ring-2]="color === newNote.color"
+            [class.ring-indigo-500]="color === newNote.color"
+          ></button>
+        </div>
+      </div>
+
+      <!-- Labels Selection -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Labels</label>
+        <div class="flex flex-wrap gap-2">
+          <button 
+            *ngFor="let label of labelOptions" 
+            (click)="toggleLabelSelection(label)" 
+            class="px-3 py-1 text-sm rounded-full transition-colors duration-200"
+            [class.bg-indigo-100]="newNote.labels.includes(label)"
+            [class.text-indigo-800]="newNote.labels.includes(label)"
+            [class.bg-gray-100]="!newNote.labels.includes(label)"
+            [class.dark:bg-gray-700]="!newNote.labels.includes(label)"
+            [class.text-gray-800]="!newNote.labels.includes(label)"
+            [class.dark:text-gray-300]="!newNote.labels.includes(label)"
+          >
+            {{ label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-end pt-4">
+        <button 
+          (click)="toggleForm()" 
+          class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg mr-2 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+        >
+          Cancel
+        </button>
+        <button 
+          (click)="addNewNote()" 
+          class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
+          [disabled]="!newNote.title.trim() && !newNote.content.trim()"
+          [class.opacity-50]="!newNote.title.trim() && !newNote.content.trim()"
+        >
+          Save Note
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pinned Notes Section -->
+  <div *ngIf="pinnedNotes.length > 0">
+    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+      <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.618 5.476a1 1 0 00-1.236 0L7 7.132V3a1 1 0 10-2 0v4.132l-2.382-1.656a1 1 0 10-1.236 1.576l3.618 3a1 1 0 001.236 0l3.618-3a1 1 0 100-1.576z"></path>
+      </svg>
+      Pinned Notes
+    </h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" [@staggered]="pinnedNotes.length">
+      <!-- Note Card -->
+      <div *ngFor="let note of pinnedNotes" 
+           [@fadeIn]
+           [class]="note.color + ' rounded-xl shadow-sm hover:shadow-md p-5 border border-gray-100 dark:border-gray-700 transition-all duration-300 relative'"
+           [class.dark:bg-gray-800]="note.color === 'bg-white'">
+        
+        <!-- Note Actions -->
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex-grow truncate">{{ note.title }}</h3>
+          <div class="flex items-center space-x-1 flex-shrink-0">
+            <button 
+              (click)="toggleNotePin(note.id)" 
+              class="p-1 text-gray-500 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
+              [@pinAnimation]="note.pinned ? 'pinned' : 'unpinned'"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.618 5.476a1 1 0 00-1.236 0L7 7.132V3a1 1 0 10-2 0v4.132l-2.382-1.656a1 1 0 10-1.236 1.576l3.618 3a1 1 0 001.236 0l3.618-3a1 1 0 100-1.576z"></path>
+              </svg>
+            </button>
+            <button 
+              (click)="deleteNote(note.id)" 
+              class="p-1 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Note Content -->
+        <div class="mb-3">
+          <p 
+            class="text-gray-700 dark:text-gray-300 text-sm"
+            [class.line-clamp-3]="expandedNoteId !== note.id"
+            (click)="toggleNoteExpansion(note.id)"
+          >{{ note.content }}</p>
+          <button 
+            *ngIf="note.content.length > 150 && expandedNoteId !== note.id"
+            (click)="toggleNoteExpansion(note.id)"
+            class="mt-1 text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+          >Show more</button>
+          <button 
+            *ngIf="expandedNoteId === note.id"
+            (click)="toggleNoteExpansion(note.id)"
+            class="mt-1 text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+          >Show less</button>
+        </div>
+        
+        <!-- Note Footer -->
+        <div class="flex flex-wrap items-center justify-between">
+          <!-- Note Labels -->
+          <div class="flex flex-wrap gap-1">
+            <span 
+              *ngFor="let label of note.labels" 
+              class="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+            >{{ label }}</span>
+          </div>
+          
+          <!-- Note Date -->
+          <span class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ formatDate(note.date) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regular Notes -->
+  <div>
+    <h3 *ngIf="pinnedNotes.length > 0" class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">All Notes</h3>
+    
+    <!-- No Notes Message -->
+    <div *ngIf="filteredNotes.length === 0" class="flex flex-col items-center justify-center text-center py-10">
+      <svg class="w-16 h-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+      </svg>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No notes found</h3>
+      <p class="text-gray-500 dark:text-gray-400">
+        {{ searchText ? 'Try a different search term' : 'Create a new note to get started' }}
+      </p>
+    </div>
+    
+    <!-- Notes Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" [@staggered]="unpinnedNotes.length">
+      <div *ngFor="let note of unpinnedNotes"
+           [@fadeIn]
+           [class]="note.color + ' rounded-xl shadow-sm hover:shadow-md p-5 border border-gray-100 dark:border-gray-700 transition-all duration-300 relative'"
+           [class.dark:bg-gray-800]="note.color === 'bg-white'">
+           
+        <!-- Note Content (Same structure as pinned notes) -->
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex-grow truncate">{{ note.title }}</h3>
+          <div class="flex items-center space-x-1 flex-shrink-0">
+            <button 
+              (click)="toggleNotePin(note.id)" 
+              class="p-1 text-gray-500 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
+              [@pinAnimation]="note.pinned ? 'pinned' : 'unpinned'"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.618 5.476a1 1 0 00-1.236 0L7 7.132V3a1 1 0 10-2 0v4.132l-2.382-1.656a1 1 0 10-1.236 1.576l3.618 3a1 1 0 001.236 0l3.618-3a1 1 0 100-1.576z"></path>
+              </svg>
+            </button>
+            <button 
+              (click)="deleteNote(note.id)" 
+              class="p-1 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <p 
+            class="text-gray-700 dark:text-gray-300 text-sm"
+            [class.line-clamp-3]="expandedNoteId !== note.id"
+            (click)="toggleNoteExpansion(note.id)"
+          >{{ note.content }}</p>
+          <button 
+            *ngIf="note.content.length > 150 && expandedNoteId !== note.id"
+            (click)="toggleNoteExpansion(note.id)"
+            class="mt-1 text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+          >Show more</button>
+          <button 
+            *ngIf="expandedNoteId === note.id"
+            (click)="toggleNoteExpansion(note.id)"
+            class="mt-1 text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+          >Show less</button>
+        </div>
+        
+        <div class="flex flex-wrap items-center justify-between">
+          <div class="flex flex-wrap gap-1">
+            <span 
+              *ngFor="let label of note.labels" 
+              class="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+            >{{ label }}</span>
+          </div>
+          <span class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ formatDate(note.date) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

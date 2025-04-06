@@ -1,0 +1,57 @@
+<div class="flex justify-between items-center px-3 md:px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300 ease-in-out relative z-10 shadow-sm">
+  <!-- Search Container -->
+  <div class="flex-1 max-w-md relative">
+    <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 w-full transition-colors duration-300 focus-within:shadow-[0_0_0_2px_rgba(79,70,229,0.3)] focus-within:bg-white dark:focus-within:bg-gray-600">
+      <span class="text-gray-500 dark:text-gray-400 mr-2">🔍</span>
+      <input 
+        type="text" 
+        placeholder="Search" 
+        (focus)="searchFocused = true" 
+        (blur)="searchFocused = false"
+        class="border-none bg-transparent w-full outline-none text-sm text-gray-700 dark:text-gray-200"
+      >
+      <div [@fadeInRight] *ngIf="searchFocused" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400 pointer-events-none">
+        Press Enter to search
+      </div>
+    </div>
+  </div>
+  
+  <!-- Header Actions -->
+  <div class="flex items-center gap-4 md:gap-4 sm:gap-2">
+    <!-- Theme Toggle Button -->
+    <button 
+      class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full w-9 h-9 flex items-center justify-center transition-colors duration-300 text-gray-700 dark:text-gray-200 relative"
+      (click)="themeService.toggleTheme()" 
+      [@pulseAnimation]="themeButtonState" 
+      (mouseenter)="activateButton('theme')" 
+      (mouseleave)="deactivateButton()"
+    >
+      <span class="text-lg">{{ (themeService.theme$ | async) === 'dark' ? '🌙' : '☀️' }}</span>
+    </button>
+    
+    <!-- Notification Button -->
+    <button 
+      class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full w-9 h-9 flex items-center justify-center transition-colors duration-300 text-gray-700 dark:text-gray-200 relative"
+      [@pulseAnimation]="notificationButtonState" 
+      (mouseenter)="activateButton('notification')" 
+      (mouseleave)="deactivateButton()"
+    >
+      <span class="text-lg">🔔</span>
+      <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center animate-pulse">1</span>
+    </button>
+    
+    <!-- User Profile -->
+    <div 
+      class="flex items-center gap-2 px-2 md:px-3 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-300"
+      [@pulseAnimation]="profileButtonState" 
+      (mouseenter)="activateButton('profile')" 
+      (mouseleave)="deactivateButton()"
+    >
+      <div class="relative">
+        <img src="assets/avatar.png" alt="Alison Hoper" class="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+        <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+      </div>
+      <span class="text-sm font-medium text-gray-800 dark:text-gray-200 hidden sm:block">Alison Hoper</span>
+    </div>
+  </div>
+</div>

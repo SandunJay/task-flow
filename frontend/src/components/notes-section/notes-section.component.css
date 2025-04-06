@@ -1,0 +1,113 @@
+/* Custom styles to enhance Tailwind */
+
+/* Make container scrollable on all screen sizes */
+.notes-container {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 1.5rem;
+  padding-bottom: 3rem; /* Increased bottom padding to ensure last note is visible */
+  scrollbar-gutter: stable;
+}
+
+/* Enhanced scrollbar styling */
+.notes-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notes-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notes-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+:host-context(.dark-theme) .notes-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Card hover effects */
+.rounded-xl {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rounded-xl:hover {
+  transform: translateY(-2px);
+}
+
+/* Enhance form focus effects */
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+  outline: none;
+}
+
+/* Line clamp for content */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Enhanced background colors for dark mode */
+:host-context(.dark-theme) .bg-amber-100 {
+  background-color: rgba(251, 191, 36, 0.2);
+}
+
+:host-context(.dark-theme) .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+:host-context(.dark-theme) .bg-sky-100 {
+  background-color: rgba(14, 165, 233, 0.2);
+}
+
+:host-context(.dark-theme) .bg-rose-100 {
+  background-color: rgba(244, 63, 94, 0.2);
+}
+
+:host-context(.dark-theme) .bg-violet-100 {
+  background-color: rgba(139, 92, 246, 0.2);
+}
+
+/* Fixed height for mobile screens */
+@media (max-width: 768px) {
+  .notes-container {
+    height: calc(100vh - 180px);
+    padding: 1rem;
+    padding-bottom: 6rem; /* Increased bottom padding for mobile */
+    overflow-y: auto; /* Explicitly set overflow for mobile */
+  }
+  
+  /* Smaller grid gaps */
+  .gap-4 {
+    gap: 0.75rem !important;
+  }
+}
+
+/* Medium and large screens scrolling behavior */
+@media (min-width: 769px) {
+  .notes-container {
+    height: calc(100vh - 120px);
+    padding-bottom: 4rem; /* Comfortable bottom padding on larger screens */
+  }
+}
+
+/* Improved button focus style */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+}
+
+/* Smooth color transition for labels */
+.rounded-full {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Enhanced dropdown menu animation */
+.group-hover\:opacity-100 {
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transform-origin: top;
+}

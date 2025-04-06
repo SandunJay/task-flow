@@ -1,0 +1,414 @@
+<div class="questions-container">
+    <!-- Section Header -->
+    <div [@fadeIn] class="mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Questions & Discussions</h1>
+      <p class="text-gray-600 dark:text-gray-400">Ask questions, get answers, and share knowledge with your team</p>
+    </div>
+    
+    <!-- Search and Filters -->
+    <div class="flex flex-col md:flex-row gap-4 mb-6 space-y-4 md:space-y-0">
+      <!-- Search Bar -->
+      <div class="relative flex-grow">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="filterQuestions()"
+          placeholder="Search questions" 
+          class="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        >
+        <div class="absolute top-0 left-0 h-full flex items-center pl-3 text-gray-500 dark:text-gray-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="flex gap-2 flex-wrap md:flex-nowrap">
+        <!-- Filter Dropdown -->
+        <select 
+          [(ngModel)]="selectedFilter" 
+          (change)="filterQuestions()" 
+          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        >
+          <option value="all">All Questions</option>
+          <option value="answered">Answered</option>
+          <option value="unanswered">Unanswered</option>
+        </select>
+        
+        <!-- Ask Question Button -->
+        <button 
+          (click)="toggleAddQuestion()" 
+          class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center"
+          [@pulse]="hoveredButtonId === 'ask-question' ? 'active' : 'inactive'"
+          (mouseenter)="setHoveredButton('ask-question')"
+          (mouseleave)="setHoveredButton(null)"
+        >
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Ask Question
+        </button>
+      </div>
+    </div>
+    
+    <!-- Tag Filter Pills -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <button 
+        (click)="selectFilterTag('all')"
+        [class.bg-indigo-100]="selectedTag === 'all'"
+        [class.text-indigo-800]="selectedTag === 'all'"
+        [class.dark:bg-indigo-900]="selectedTag === 'all'"
+        [class.dark:text-indigo-100]="selectedTag === 'all'"
+        [class.bg-gray-100]="selectedTag !== 'all'"
+        [class.text-gray-700]="selectedTag !== 'all'"
+        [class.dark:bg-gray-800]="selectedTag !== 'all'"
+        [class.dark:text-gray-400]="selectedTag !== 'all'"
+        class="px-3 py-1 rounded-full text-sm transition-colors"
+      >
+        All Tags
+      </button>
+      <button 
+        *ngFor="let tag of tags"
+        (click)="selectFilterTag(tag)"
+        [class.bg-indigo-100]="selectedTag === tag"
+        [class.text-indigo-800]="selectedTag === tag"
+        [class.dark:bg-indigo-900]="selectedTag === tag"
+        [class.dark:text-indigo-100]="selectedTag === tag"
+        [class.bg-gray-100]="selectedTag !== tag"
+        [class.text-gray-700]="selectedTag !== tag"
+        [class.dark:bg-gray-800]="selectedTag !== tag"
+        [class.dark:text-gray-400]="selectedTag !== tag"
+        class="px-3 py-1 rounded-full text-sm transition-colors"
+      >
+        {{ tag }}
+      </button>
+    </div>
+    
+    <!-- Add New Question Form -->
+    <div *ngIf="isAddingQuestion" [@slideDown] class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">New Question</h2>
+        <button 
+          (click)="toggleAddQuestion()" 
+          class="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="space-y-4">
+        <form [formGroup]="questionForm" class="space-y-4">
+          <!-- Title -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Title <span class="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              formControlName="title" 
+              placeholder="What do you want to ask?" 
+              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            >
+            <div *ngIf="questionForm.get('title')?.invalid && questionForm.get('title')?.touched" class="text-red-500 text-sm mt-1">
+              <span *ngIf="questionForm.get('title')?.errors?.['required']">Title is required</span>
+              <span *ngIf="questionForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters</span>
+            </div>
+          </div>
+          
+          <!-- Content -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Details <span class="text-red-500">*</span></label>
+            <textarea 
+              formControlName="content" 
+              rows="5" 
+              placeholder="Provide more details about your question..." 
+              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            ></textarea>
+            <div *ngIf="questionForm.get('content')?.invalid && questionForm.get('content')?.touched" class="text-red-500 text-sm mt-1">
+              <span *ngIf="questionForm.get('content')?.errors?.['required']">Details are required</span>
+              <span *ngIf="questionForm.get('content')?.errors?.['minlength']">Details must be at least 20 characters</span>
+            </div>
+          </div>
+          
+          <!-- File Attachments -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Attachments</label>
+            <div 
+              class="file-upload-area"
+              [class.drag-over]="isDragging"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              (click)="fileInput.click()"
+            >
+              <input 
+                #fileInput 
+                type="file" 
+                multiple 
+                class="hidden" 
+                (change)="onFileChange($event)"
+                accept="image/*,.pdf,.doc,.docx,.txt"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Drag and drop files here, or <span class="text-indigo-600 dark:text-indigo-400">browse</span>
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                Supported formats: JPEG, PNG, PDF, DOC, TXT (up to 10MB)
+              </p>
+            </div>
+
+            <!-- File Previews -->
+            <div class="mt-4 space-y-2" *ngIf="uploadedFiles.length > 0">
+              <div class="file-preview" *ngFor="let file of uploadedFiles; let i = index">
+                <div class="file-icon">{{ getFileIcon(file) }}</div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ file.name }}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">{{ getFileSize(file) }}</p>
+                </div>
+                <button 
+                  type="button"
+                  class="text-gray-400 hover:text-red-500 transition-colors p-1"
+                  (click)="removeFile(i); $event.stopPropagation();"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Tags -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags</label>
+            <div class="flex flex-wrap gap-2">
+              <button 
+                type="button"
+                *ngFor="let tag of tags"
+                (click)="toggleTagSelection(tag)"
+                [class.bg-indigo-100]="isTagSelected(tag)"
+                [class.text-indigo-800]="isTagSelected(tag)"
+                [class.dark:bg-indigo-900]="isTagSelected(tag) && currentTheme === 'dark'"
+                [class.dark:text-indigo-100]="isTagSelected(tag) && currentTheme === 'dark'"
+                [class.bg-gray-100]="!isTagSelected(tag)"
+                [class.text-gray-800]="!isTagSelected(tag)"
+                [class.dark:bg-gray-800]="!isTagSelected(tag) && currentTheme === 'dark'"
+                [class.dark:text-gray-400]="!isTagSelected(tag) && currentTheme === 'dark'"
+                class="px-3 py-1 rounded-full text-sm transition-colors"
+              >
+                {{ tag }}
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Submit Button -->
+        <div class="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+          <button 
+            (click)="toggleAddQuestion()"
+            class="px-4 py-2 mr-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            (click)="submitQuestion()"
+            [disabled]="questionForm.invalid"
+            [ngClass]="{'opacity-50 cursor-not-allowed': questionForm.invalid, 'hover:bg-indigo-700': !questionForm.invalid}"
+            class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+          >
+            Post Question
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- No Questions Message -->
+    <div *ngIf="filteredQuestions.length === 0" class="flex flex-col items-center justify-center text-center py-10">
+      <svg class="w-16 h-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No questions found</h3>
+      <p class="text-gray-500 dark:text-gray-400 mb-4">
+        {{ searchQuery ? 'Try a different search term or filter' : 'Be the first to ask a question!' }}
+      </p>
+      <button 
+        *ngIf="!isAddingQuestion"
+        (click)="toggleAddQuestion()" 
+        class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
+      >
+        Ask a Question
+      </button>
+    </div>
+    
+    <!-- Questions List -->
+    <div class="space-y-6 pb-16 md:pb-24" [@staggerList]="filteredQuestions.length">
+      <div *ngFor="let question of filteredQuestions" 
+           class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md p-5 transition-all" 
+           [@fadeIn]>
+        
+        <!-- Question Header -->
+        <div class="flex items-start gap-3">
+          <div class="flex-shrink-0">
+            <img [src]="question.author.avatar" [alt]="question.author.name" class="w-10 h-10 rounded-full object-cover">
+          </div>
+          
+          <div class="flex-grow">
+            <!-- Title and Toggle -->
+            <div class="flex justify-between items-start" (click)="toggleQuestionExpansion(question)">
+              <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
+                {{ question.title }}
+              </h2>
+              <button class="text-gray-500 dark:text-gray-400 p-1 transform transition-transform" [class.rotate-180]="question.isExpanded">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Author and Date -->
+            <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span>{{ question.author.name }}</span>
+              <span class="mx-2">•</span>
+              <span>{{ question.author.role }}</span>
+              <span class="mx-2">•</span>
+              <span>{{ getTimeAgo(question.createdAt) }}</span>
+            </div>
+            
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span *ngFor="let tag of question.tags" class="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Question Content and Answers (Expandable) -->
+        <div *ngIf="question.isExpanded || isMobile" [@slideDown] class="mt-4">
+          <!-- Question Content -->
+          <div class="text-gray-700 dark:text-gray-300 text-sm mb-4 p-3 bg-gray-50 dark:bg-gray-750 rounded-lg">
+            {{ question.content }}
+          </div>
+          
+          <!-- Answers Count -->
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-md font-medium text-gray-800 dark:text-gray-200">
+              {{ question.answers.length }} {{ question.answers.length === 1 ? 'Answer' : 'Answers' }}
+            </h3>
+            <button 
+              (click)="toggleAnswerForm(question); $event.stopPropagation()"
+              class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors flex items-center"
+              [@pulse]="hoveredButtonId === 'answer-'+question.id ? 'active' : 'inactive'"
+              (mouseenter)="setHoveredButton('answer-'+question.id)"
+              (mouseleave)="setHoveredButton(null)"
+            >
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Add Answer
+            </button>
+          </div>
+          
+          <!-- Answer Form -->
+          <div *ngIf="question.isAnswerFormVisible" [@slideDown] class="mb-4">
+            <textarea 
+              [id]="'answer-textarea-' + question.id"
+              [(ngModel)]="newAnswer" 
+              rows="3" 
+              placeholder="Write your answer..." 
+              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 mb-2"
+            ></textarea>
+            <div class="flex justify-end gap-2">
+              <button 
+                (click)="toggleAnswerForm(question)" 
+                class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                (click)="submitAnswer(question)" 
+                [disabled]="!newAnswer.trim()"
+                [class.opacity-50]="!newAnswer.trim()"
+                class="px-3 py-1 text-sm bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+          
+          <!-- Answer List -->
+          <div *ngIf="question.answers.length > 0" class="space-y-4">
+            <div *ngFor="let answer of question.answers" class="border-l-2 pl-4" [class.border-green-500]="answer.isAccepted" [class.border-gray-300]="!answer.isAccepted" [class.dark:border-gray-700]="!answer.isAccepted">
+              <!-- Answer Content -->
+              <div class="text-gray-700 dark:text-gray-300 text-sm">
+                {{ answer.content }}
+              </div>
+              
+              <!-- Answer Footer -->
+              <div class="flex items-center justify-between mt-2">
+                <!-- Author Info -->
+                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                  <span>{{ answer.author.name }}</span>
+                  <span class="mx-2">•</span>
+                  <span>{{ getTimeAgo(answer.createdAt) }}</span>
+                  <span *ngIf="answer.isAccepted" class="ml-2 text-green-600 dark:text-green-400 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Accepted
+                  </span>
+                </div>
+                
+                <!-- Answer Actions -->
+                <div class="flex items-center gap-3">
+                  <!-- Upvote Button -->
+                  <button 
+                    (click)="toggleUpvote(answer)" 
+                    class="flex items-center text-sm transition-colors"
+                    [class.text-indigo-600]="answer.userHasUpvoted"
+                    [class.dark:text-indigo-400]="answer.userHasUpvoted"
+                    [class.text-gray-500]="!answer.userHasUpvoted"
+                    [class.dark:text-gray-400]="!answer.userHasUpvoted"
+                  >
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                    {{ answer.upvotes }}
+                  </button>
+                  
+                  <!-- Accept Answer Button -->
+                  <button 
+                    (click)="toggleAcceptAnswer(question, answer)" 
+                    class="text-sm transition-colors"
+                    [class.text-green-600]="answer.isAccepted"
+                    [class.dark:text-green-400]="answer.isAccepted"
+                    [class.text-gray-500]="!answer.isAccepted"
+                    [class.dark:text-gray-400]="!answer.isAccepted"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Answer Count Preview (when collapsed) -->
+        <div *ngIf="!question.isExpanded && !isMobile" class="mt-3 text-sm text-gray-500 dark:text-gray-400 flex items-center cursor-pointer" (click)="toggleQuestionExpansion(question)">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+          </svg>
+          {{ question.answers.length }} {{ question.answers.length === 1 ? 'answer' : 'answers' }}
+          <span class="ml-1">• Click to expand</span>
+        </div>
+      </div>
+      
+      <!-- Extra spacer at the bottom for better scrolling -->
+      <div class="h-12"></div>
+    </div>
+  </div>

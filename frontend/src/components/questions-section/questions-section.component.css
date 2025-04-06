@@ -1,0 +1,387 @@
+/* Make questions container scrollable on all screen sizes with better bottom spacing */
+.questions-container {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 1.5rem;
+  padding-bottom: 8rem; /* Increased padding at the bottom for better visibility */
+  scrollbar-gutter: stable;
+  width: 100%; /* Ensure container takes full width */
+  max-width: 100%; /* Remove width restriction to use full screen width */
+  margin: 0 auto; /* Center the container on wide screens */
+}
+
+/* Enhanced scrollbar styling */
+.questions-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.questions-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.questions-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+:host-context(.dark-theme) .questions-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Card hover effects */
+.rounded-xl {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rounded-xl:hover {
+  transform: translateY(-2px);
+}
+
+/* Line clamp for content previews */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Dark theme enhancements */
+:host-context(.dark-theme) .bg-gray-750 {
+  background-color: #2a2d31;
+}
+
+:host-context(.dark-theme) button:not(.bg-indigo-600):not(.bg-indigo-700):not(.text-white):hover {
+  background-color: #3a3d41;
+}
+
+/* Enhanced dark mode support for all subcomponents */
+:host-context(.dark-theme) .bg-white {
+  background-color: #2f3336 !important;
+}
+
+:host-context(.dark-theme) .text-gray-900 {
+  color: #e0e0e0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-700 {
+  color: #c0c0c0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-800 {
+  color: #d0d0d0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-600 {
+  color: #a0a0a0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-500 {
+  color: #8e9095 !important;
+}
+
+:host-context(.dark-theme) .border-gray-100 {
+  border-color: #3a3d41 !important;
+}
+
+:host-context(.dark-theme) .border-gray-200 {
+  border-color: #3a3d41 !important;
+}
+
+:host-context(.dark-theme) .border-gray-300 {
+  border-color: #4a4d51 !important;
+}
+
+/* Dark mode for form elements and inputs */
+:host-context(.dark-theme) input,
+:host-context(.dark-theme) textarea,
+:host-context(.dark-theme) select {
+  background-color: #3a3d41 !important;
+  color: #e0e0e0 !important;
+  border-color: #4a4d51 !important;
+}
+
+:host-context(.dark-theme) input::placeholder, 
+:host-context(.dark-theme) textarea::placeholder {
+  color: #8e9095 !important;
+}
+
+/* Form focus styles */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+}
+
+/* Transitions for smooth theme changes */
+.questions-container, .questions-container * {
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Question expansion indicator */
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Enhanced mobile styling with improved bottom spacing */
+@media (max-width: 768px) {
+  .questions-container {
+    height: calc(100vh - 180px);
+    padding: 1rem;
+    padding-bottom: 8rem; /* Ensure enough padding on mobile too */
+  }
+  
+  /* Stack filters on mobile */
+  .flex-wrap {
+    justify-content: flex-start;
+  }
+  
+  /* Make answer buttons more touch-friendly */
+  button {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* Improved layout for medium and large screens */
+@media (min-width: 768px) {
+  .questions-container {
+    padding: 2rem;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+    max-width: none; /* Remove max-width restriction */
+    width: 100%; /* Use 100% width */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  /* Full width grid layout for questions */
+  .space-y-6 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); /* Smaller minimum width for more columns */
+  .space-y-6 > div {
+    width: 100%;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Make search input use more space */
+  .relative.flex-grow {
+    flex-grow: 3;
+  }
+}
+
+/* Layout adjustments for large screens */
+@media (min-width: 1280px) {
+  .questions-container {
+    padding: 2.5rem;
+  }
+  
+  /* 2-column grid on larger screens */
+  .space-y-6 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  /* Ensure expanded questions have proper spacing */
+  .space-y-6 > div:has(> .mt-4) {
+    grid-column: 1 / -1; /* Make expanded questions take full width */
+  }
+}
+
+/* Better spacing in filters section */
+@media (min-width: 768px) {
+  .flex.gap-2.flex-wrap.md\:flex-nowrap {
+    flex-wrap: nowrap !important;
+    gap: 0.75rem;
+  }
+  
+  /* Enhanced filters distribution */
+  .flex.flex-wrap.gap-2.mb-6 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+/* Additional enhancement for form layout in medium+ screens */
+@media (min-width: 768px) {
+  form.space-y-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  form.space-y-4 > div:nth-child(1),
+  form.space-y-4 > div:nth-child(2),
+  form.space-y-4 > div:nth-child(3) {
+    grid-column: 1 / -1; /* These elements span full width */
+  }
+}
+
+/* Use all available width for the questions list */
+.space-y-6 {
+  width: 100%;
+}
+
+/* Fix for question layout even distribution */
+@supports (display: grid) {
+  .space-y-6 > div {
+    margin-top: 0 !important;
+  }
+}
+
+/* Reset space-y utility for grid layout */
+@media (min-width: 768px) {
+  .space-y-6 {
+    margin-top: 0 !important;
+  }
+}
+
+/* Improved button focus style */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+}
+
+/* Enhanced tag hover effects */
+.rounded-full {
+  transition: all 0.2s ease;
+}
+
+.rounded-full:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+:host-context(.dark-theme) .rounded-full:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for accepted answers */
+.border-green-500 {
+  position: relative;
+}
+
+.border-green-500::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 2px;
+  height: 0;
+  background-color: #10B981;
+  animation: growHeight 0.5s ease-out forwards;
+}
+
+@keyframes growHeight {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+/* Improved avatar styling */
+.rounded-full.object-cover {
+  border: 2px solid #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+:host-context(.dark-theme) .rounded-full.object-cover {
+  border-color: #383c40;
+}
+
+.rounded-full.object-cover:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+}
+
+/* File upload area styling */
+.file-upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.file-upload-area:hover {
+  border-color: #4F46E5;
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+:host-context(.dark-theme) .file-upload-area {
+  border-color: #4a4d51;
+}
+
+:host-context(.dark-theme) .file-upload-area:hover {
+  border-color: #6366F1;
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.file-upload-area.drag-over {
+  border-color: #4F46E5;
+  background-color: rgba(79, 70, 229, 0.1);
+  transform: scale(1.01);
+}
+
+:host-context(.dark-theme) .file-upload-area.drag-over {
+  border-color: #6366F1;
+  background-color: rgba(99, 102, 241, 0.2);
+}
+
+/* File preview styling */
+.file-preview {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 0.375rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.file-preview:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+}
+
+:host-context(.dark-theme) .file-preview {
+  background-color: #3a3d41;
+  border-color: #4a4d51;
+}
+
+:host-context(.dark-theme) .file-preview:hover {
+  background-color: #454950;
+}
+
+/* File type icons */
+.file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.375rem;
+  margin-right: 0.75rem;
+  background-color: #e0f2fe;
+  color: #0284c7;
+  font-size: 1.25rem;
+}
+
+:host-context(.dark-theme) .file-icon {
+  background-color: #334155;
+  color: #38bdf8;
+}
+
+/* Extra bottom padding for content */
+.space-y-6.pb-16 {
+  margin-bottom: 2rem;
+}
+
+/* Make sure the last question is fully visible */
+.space-y-6.pb-16 > div:last-of-type {
+  margin-bottom: 4rem;
+}
+}

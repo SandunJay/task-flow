@@ -1,0 +1,224 @@
+/* Custom animations and effects for overview section */
+
+/* Enhance hover effects */
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+:host-context(.dark-theme) .hover\:shadow-md:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Breathing animation for status indicators */
+.w-2.h-2.rounded-full {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Custom height animation for charts */
+@keyframes heightAnimation {
+  from { height: 0%; }
+  to { height: var(--height); }
+}
+
+.bg-blue-500.rounded-t-md {
+  animation: heightAnimation 1s ease-out forwards;
+}
+
+/* Enhance card transitions */
+.transform.hover\:-translate-y-1:hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Gradient overlays for cards */
+.bg-white.rounded-xl {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-white.rounded-xl::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, #4d6fff, #38d9a9);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bg-white.rounded-xl:hover::before {
+  opacity: 1;
+}
+
+:host-context(.dark-theme) .bg-white.rounded-xl::before {
+  background: linear-gradient(to right, #4d6fff, #00c9a7);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .overview-container {
+    padding: 16px;
+  }
+  
+  .grid.gap-6 {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .text-2xl.md\:text-3xl {
+    font-size: 1.5rem;
+  }
+  
+  .p-5 {
+    padding: 1rem;
+  }
+}
+
+/* Dark mode adjustments */
+:host-context(.dark-theme) .bg-gray-800 {
+  background-color: #242729;
+}
+
+:host-context(.dark-theme) .bg-gray-700 {
+  background-color: #2f3336;
+}
+
+:host-context(.dark-theme) .bg-gray-750 {
+  background-color: #282c2f;
+}
+
+:host-context(.dark-theme) .bg-gray-650 {
+  background-color: #32363a;
+}
+
+/* Add smooth transitions for dark/light theme changes */
+.overview-container * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Make overview container scrollable */
+.overview-container {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Use consistent card styling */
+.overview-card {
+  @apply bg-white rounded-xl shadow-sm p-5;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dark theme styles applied through host-context */
+:host-context(.dark-theme) .overview-card {
+  @apply bg-gray-800;
+}
+
+/* Enhanced hover effects */
+.overview-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:host-context(.dark-theme) .overview-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Improve mobile scrolling experience */
+@media (max-width: 768px) {
+  .overview-container {
+    height: calc(100vh - 180px);
+    padding-bottom: 64px; /* Add extra padding at the bottom */
+    scrollbar-gutter: stable; /* Prevent layout shift when scrollbar appears */
+  }
+  
+  .grid.gap-6 {
+    row-gap: 1.25rem !important; /* Tighter spacing on mobile */
+  }
+}
+
+/* Custom height animation for charts */
+@keyframes heightAnimation {
+  from { height: 0%; }
+  to { height: var(--height); }
+}
+
+/* More explicit dark mode styles */
+:host-context(.dark-theme) .text-gray-900 {
+  color: #e0e0e0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-600 {
+  color: #a0a0a0 !important;
+}
+
+:host-context(.dark-theme) .text-gray-700 {
+  color: #c0c0c0 !important;
+}
+
+:host-context(.dark-theme) .bg-gray-100 {
+  background-color: #2f3336 !important;
+}
+
+:host-context(.dark-theme) .bg-gray-50 {
+  background-color: #3a3d41 !important;
+}
+
+:host-context(.dark-theme) .bg-gray-200 {
+  background-color: #3a3d41 !important;
+}
+
+:host-context(.dark-theme) .border-gray-100 {
+  border-color: #3a3d41 !important;
+}
+
+/* Smooth transitions for all elements */
+.overview-container * {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Make interactive elements more noticeable */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s, transform 0.3s;
+  border-radius: inherit;
+}
+
+button:hover:after {
+  opacity: 0.1;
+  transform: scale(1);
+}
+
+/* Enhance accessibility with focus styles */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5) !important;
+}
+
+:host-context(.dark-theme) button:focus {
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5) !important;
+}
