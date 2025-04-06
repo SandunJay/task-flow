@@ -11,5 +11,6 @@ public record TaskRequest(
         String description,
         TaskStatus status,
         LocalDateTime dueDate,
-        List<Long> assigneeIds
+        List<Long> assigneeIds,
+        List<SubTaskRequest> subTasks
 ) {}
