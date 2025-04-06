@@ -737,3 +737,45 @@ app-overview-section {
   overflow-y: auto;
   display: block;
 }
+
+/* Task Details Panel Styling */
+.task-details-panel {
+  width: 350px;
+  height: 100%;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Mobile Task Details Modal */
+.mobile-task-modal {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobile-task-modal-content {
+  animation: slideUp 0.3s ease;
+  position: absolute;
+  bottom: 0;
+  max-height: 90vh;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Board columns width transition */
+.board-columns {
+  transition: width 0.3s ease;
+}
+
+.with-details {
+  width: calc(100% - 350px);
+}

@@ -1,0 +1,113 @@
+<div class="task-details">
+  <div class="header">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ task?.title }}</h2>
+    <button (click)="close()" class="close-button">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Mobile handle for dragging -->
+  <div *ngIf="isMobile" class="mobile-drag-handle mx-auto w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mb-4"></div>
+  
+  <!-- Task status and assignee -->
+  <div class="flex flex-wrap gap-2 mb-6">
+    <span [class]="getStatusClass(task?.status) + ' status-badge'">{{ task?.status }}</span>
+    <span [class]="getPriorityClass(task?.priority) + ' status-badge'">{{ task?.priority }}</span>
+    <div class="flex items-center ml-auto">
+      <span class="text-sm text-gray-600 dark:text-gray-400 mr-2">Assigned to:</span>
+      <div class="flex items-center">
+        <img [src]="task?.assignee.avatar" [alt]="task?.assignee.name" class="w-6 h-6 rounded-full">
+        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ task?.assignee.name }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation Tabs -->
+  <div class="tab-navigation">
+    <button [class.active]="activeTab === 'details'" (click)="setActiveTab('details')">Details</button>
+    <button [class.active]="activeTab === 'comments'" (click)="setActiveTab('comments')">Comments</button>
+    <button [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">History</button>
+  </div>
+  
+  <!-- Tab Content -->
+  <div class="tab-content" *ngIf="activeTab === 'details'">
+    <div class="detail-section">
+      <h3>Description</h3>
+      <p class="text-gray-700 dark:text-gray-300">{{ task?.description }}</p>
+    </div>
+    
+    <div class="detail-section">
+      <h3>Due Date</h3>
+      <p class="text-gray-700 dark:text-gray-300">{{ task?.dueDate }}</p>
+    </div>
+    
+    <div class="detail-section">
+      <h3>Attachments</h3>
+      <div class="flex flex-wrap gap-3">
+        <div *ngFor="let file of task?.attachments" class="attachment-item">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+          </svg>
+          <span>{{ file.name }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="detail-section">
+      <h3>Tags</h3>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let tag of task?.tags" class="tag-badge">{{ tag }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" *ngIf="activeTab === 'comments'">
+    <div class="comments-list">
+      <div *ngFor="let comment of task?.comments" class="comment-item">
+        <div class="flex items-start">
+          <img [src]="comment.user.avatar" [alt]="comment.user.name" class="w-8 h-8 rounded-full">
+          <div class="ml-3 flex-1">
+            <div class="flex justify-between">
+              <h4 class="text-sm font-medium text-gray-900 dark:text-white">{{ comment.user.name }}</h4>
+              <span class="text-xs text-gray-500 dark:text-gray-400">{{ comment.date }}</span>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mt-1">{{ comment.text }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add Comment -->
+    <div class="add-comment">
+      <textarea 
+        [(ngModel)]="newComment" 
+        placeholder="Add a comment..." 
+        class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"></textarea>
+      <div class="flex justify-end mt-2">
+        <button 
+          (click)="addComment()" 
+          class="submit-button" 
+          [disabled]="!newComment.trim()">
+          Add Comment
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" *ngIf="activeTab === 'history'">
+    <div class="timeline">
+      <div *ngFor="let event of task?.history" class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="flex justify-between">
+            <h4 class="text-sm font-medium text-gray-900 dark:text-white">{{ event.user }}</h4>
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ event.date }}</span>
+          </div>
+          <p class="text-gray-700 dark:text-gray-300 text-sm mt-1">{{ event.action }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

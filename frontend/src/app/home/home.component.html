@@ -1,5 +1,5 @@
 <div class="home-container" [class.sidebar-collapsed]="collapsed">
-  <!-- Responsive sidebar -->
+  <!-- Sidebar wrapper -->
   <div class="sidebar-wrapper" [class.collapsed]="collapsed">
     <app-sidebar></app-sidebar>
     
@@ -24,12 +24,12 @@
     </div>
     
     <div class="main-content">
-      <!-- Main content with project board -->
+      <!-- Main content - Router outlet for child routes -->
       <div class="board-section">
-        <app-project-board></app-project-board>
+        <router-outlet></router-outlet>
       </div>
       
-      <!-- Right sidebar with team members -->
+      <!-- Team sidebar -->
       <div class="team-sidebar">
         <div class="team-header">
           <h2>Team Members</h2>

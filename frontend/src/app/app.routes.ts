@@ -3,51 +3,69 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { VerifyComponent } from './verify/verify.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardLayoutComponent } from './dashboard/dashboard-layout/dashboard-layout.component';
 import { ProjectBoardComponent } from '../components/project-board/project-board.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { NoAuthGuard } from './shared/guards/no-auth.guard';
 
 export const routes: Routes = [
-  { 
+  // Auth routes (no layout with header/sidebar)
+  {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    children: [
+      { 
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'login'
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [NoAuthGuard],
+        data: { animation: 'login' }
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        canActivate: [NoAuthGuard],
+        data: { animation: 'register' }
+      },
+      {
+        path: 'verify',
+        component: VerifyComponent,
+        canActivate: [NoAuthGuard],
+        data: { animation: 'verify' }
+      }
+    ]
   },
+  
+  // App routes (with layout including header/sidebar)
   {
-    path: 'login',
-    component: LoginComponent,
-    data: { animation: 'login' }
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    data: { animation: 'register' }
-  },
-  {
-    path: 'verify',
-    component: VerifyComponent,
-    data: { animation: 'verify' }
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: '',
+    component: DashboardLayoutComponent,
     canActivate: [AuthGuard],
-    data: { animation: 'dashboard' }
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: { animation: 'dashboard' }
+      },
+      {
+        path: 'project-board',
+        component: ProjectBoardComponent,
+        data: { animation: 'projectBoard' } 
+      },
+      {
+        path: 'project-board/:id',
+        component: ProjectBoardComponent,
+        data: { animation: 'projectBoardDetail' } 
+      }
+    ]
   },
-  {
-    path: 'project-board',
-    component: ProjectBoardComponent,
-    canActivate: [AuthGuard],
-    data: { animation: 'projectBoard' } 
-  },
-  {
-    path: 'project-board/:id',
-    component: ProjectBoardComponent,
-    canActivate: [AuthGuard],
-    data: { animation: 'projectBoardDetail' } 
-  },
+  
   // Fallback route
   { 
     path: '**', 
-    redirectTo: 'dashboard' 
+    redirectTo: 'login' 
   }
 ];

@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { OverviewSectionComponent } from '../overview-section/overview-section.component';
@@ -12,15 +12,23 @@ interface Task {
   id: number;
   title: string;
   description: string;
-  tags: { name: string; color: string }[];
-  progress: string;
-  assignees: number[];
+  dueDate: string;
+  priority: string;
+  status: string;
   comments: number;
-  attachments: number;
-  views: number;
+  assignee: {
+    name: string;
+    avatar: string;
+  };
+  tags?: { name: string; color: string }[];
+  progress?: string;
+  assignees?: number[];
+  attachments?: number;
+  views?: number;
 }
 
 interface TaskColumn {
+  id: string;
   name: string;
   tasks: Task[];
   color: string;
@@ -102,9 +110,9 @@ interface TaskColumn {
     ])
   ]
 })
-export class ProjectBoardComponent {
+export class ProjectBoardComponent implements OnInit {
   isCompactView = false;
-  activeTabIndex = 0;
+  activeTabIndex = 1; // Set to 1 to show tasks tab by default
   activeViewIndex = 0;
   private isBrowser: boolean;
   hoveredTabIndex = -1;
@@ -117,168 +125,7 @@ export class ProjectBoardComponent {
   views = ['Board', 'Table', 'List'];
   viewIcons = ['📋', '📊', '📝'];
   
-  taskColumns: TaskColumn[] = [
-    {
-      name: 'To Do',
-      color: '#ff6b6b',
-      count: 3,
-      tasks: [
-        {
-          id: 1,
-          title: 'Wireframing',
-          description: 'Create low-fidelity designs that outline the basic structure and layout of the product or website.',
-          tags: [{ name: 'UX stages', color: '#f9d094' }],
-          progress: '0/8',
-          assignees: [1, 2, 3, 4],
-          comments: 2,
-          attachments: 1,
-          views: 9
-        },
-        {
-          id: 5,
-          title: 'User Research',
-          description: 'Conduct interviews and surveys with potential users to understand their needs and pain points.',
-          tags: [{ name: 'Research', color: '#a2d2ff' }],
-          progress: '1/5',
-          assignees: [2, 5],
-          comments: 3,
-          attachments: 2,
-          views: 12
-        },
-        {
-          id: 6,
-          title: 'Content Strategy',
-          description: 'Develop a coherent content plan for the website including information architecture and messaging.',
-          tags: [{ name: 'Content', color: '#c8b6ff' }],
-          progress: '0/4',
-          assignees: [1, 3],
-          comments: 1,
-          attachments: 0,
-          views: 4
-        }
-      ]
-    },
-    {
-      name: 'In Progress',
-      color: '#4dabf7',
-      count: 3,
-      tasks: [
-        {
-          id: 2,
-          title: 'Customer Journey Mapping',
-          description: 'Identify the key touchpoints and pain points in the customer journey, and develop strategies to improve the overall customer experience.',
-          tags: [{ name: 'UX stages', color: '#f9d094' }],
-          progress: '3/10',
-          assignees: [1, 2, 3, 5],
-          comments: 11,
-          attachments: 7,
-          views: 6
-        },
-        {
-          id: 7,
-          title: 'Visual Design',
-          description: 'Create the visual elements of the interface including icons, typography, and color schemes.',
-          tags: [{ name: 'Design', color: '#ffadad' }],
-          progress: '5/8',
-          assignees: [4, 5],
-          comments: 4,
-          attachments: 3,
-          views: 15
-        },
-        {
-          id: 8,
-          title: 'Prototype Development',
-          description: 'Build interactive prototypes to validate design concepts and user flows before development.',
-          tags: [{ name: 'Development', color: '#bdb2ff' }],
-          progress: '2/6',
-          assignees: [2, 3],
-          comments: 7,
-          attachments: 1,
-          views: 8
-        },
-        {
-            id: 12,
-            title: 'Prototype Development2',
-            description: 'Build interactive prototypes to validate design concepts and user flows before development.',
-            tags: [{ name: 'Development', color: '#bdb2ff' }],
-            progress: '2/6',
-            assignees: [2, 3],
-            comments: 7,
-            attachments: 1,
-            views: 8
-          }
-      ]
-    },
-    {
-      name: 'Need Review',
-      color: '#ffd43b',
-      count: 2,
-      tasks: [
-        {
-          id: 3,
-          title: 'Competitor research',
-          description: 'Research competitors and identify weakness and strengths each of them. Comparing their product features, quality.',
-          tags: [{ name: 'UX stages', color: '#f9d094' }],
-          progress: '7/7',
-          assignees: [1, 2, 3],
-          comments: 5,
-          attachments: 9,
-          views: 4
-        },
-        {
-          id: 9,
-          title: 'User Testing Analysis',
-          description: 'Analyze the results from usability tests and prepare recommendations for design improvements.',
-          tags: [{ name: 'Testing', color: '#a8dadc' }],
-          progress: '4/4',
-          assignees: [1, 5],
-          comments: 8,
-          attachments: 5,
-          views: 11
-        }
-      ]
-    },
-    {
-      name: 'Done',
-      color: '#69db7c',
-      count: 3,
-      tasks: [
-        {
-          id: 4,
-          title: 'Branding, visual identity',
-          description: 'Create a brand identity system that includes a logo, typography, color palette, and brand guidelines.',
-          tags: [{ name: 'Branding', color: '#ffc9c9' }],
-          progress: '3/3',
-          assignees: [1, 2, 3],
-          comments: 5,
-          attachments: 8,
-          views: 1
-        },
-        {
-          id: 10,
-          title: 'Requirements Gathering',
-          description: 'Collect and document functional and non-functional requirements from stakeholders.',
-          tags: [{ name: 'Planning', color: '#d8f3dc' }],
-          progress: '6/6',
-          assignees: [3, 4],
-          comments: 9,
-          attachments: 4,
-          views: 7
-        },
-        {
-          id: 11,
-          title: 'Project Kickoff',
-          description: 'Organize and conduct the initial project meeting to align team members and stakeholders.',
-          tags: [{ name: 'Planning', color: '#d8f3dc' }],
-          progress: '5/5',
-          assignees: [1, 2, 4, 5],
-          comments: 6,
-          attachments: 3,
-          views: 14
-        }
-      ]
-    }
-  ];
+  taskColumns: TaskColumn[] = [];
   
   @HostListener('window:resize')
   onResize() {
@@ -313,22 +160,225 @@ export class ProjectBoardComponent {
       this.isMobileView = false;
     }
   }
-  
+
+  ngOnInit(): void {
+    // Initialize task data
+    this.initializeTaskData();
+    
+    if (this.isBrowser) {
+      // Only check for mobile view in browser environment
+      this.checkMobileView();
+      
+      // Add event listener for window resize only in browser
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Remove event listener to prevent memory leaks
+    if (this.isBrowser) {
+      window.removeEventListener('resize', this.onResize.bind(this));
+    }
+  }
+
+  checkMobileView(): void {
+    if (this.isBrowser) {
+      this.isMobileView = window.innerWidth < 768;
+    }
+  }
+
+  initializeTaskData(): void {
+    // Sample task data
+    this.taskColumns = [
+      {
+        id: 'col1',
+        name: 'To Do',
+        count: 3,
+        color: '#A78BFA', // violet
+        tasks: [
+          {
+            id: 1,
+            title: 'Research API integration options',
+            description: 'Look into available third-party APIs for payment processing and compare pricing and features.',
+            dueDate: '2023-08-15',
+            priority: 'Medium',
+            status: 'To Do',
+            comments: 2,
+            assignee: {
+              name: 'John Smith',
+              avatar: 'assets/avatar1.png'
+            }
+          },
+          {
+            id: 2,
+            title: 'Create wireframes for dashboard',
+            description: 'Design initial wireframes for the analytics dashboard including chart placements and key metrics.',
+            dueDate: '2023-08-18',
+            priority: 'High',
+            status: 'To Do',
+            comments: 0,
+            assignee: {
+              name: 'Emma Johnson',
+              avatar: 'assets/avatar2.png'
+            }
+          },
+          {
+            id: 3,
+            title: 'Review competitor features',
+            description: 'Analyze competitor products and identify key features we should implement in our next version.',
+            dueDate: '2023-08-20',
+            priority: 'Low',
+            status: 'To Do',
+            comments: 1,
+            assignee: {
+              name: 'Michael Lee',
+              avatar: 'assets/avatar3.png'
+            }
+          }
+        ]
+      },
+      {
+        id: 'col2',
+        name: 'In Progress',
+        count: 2,
+        color: '#38BDF8', // sky
+        tasks: [
+          {
+            id: 4,
+            title: 'Implement user authentication',
+            description: 'Set up OAuth2 authentication flow and JWT token validation for secure user login.',
+            dueDate: '2023-08-10',
+            priority: 'High',
+            status: 'In Progress',
+            comments: 3,
+            assignee: {
+              name: 'Sarah Chen',
+              avatar: 'assets/avatar4.png'
+            }
+          },
+          {
+            id: 5,
+            title: 'Design database schema',
+            description: 'Create relational database schema with proper indexes and foreign keys for optimal performance.',
+            dueDate: '2023-08-12',
+            priority: 'Medium',
+            status: 'In Progress',
+            comments: 2,
+            assignee: {
+              name: 'David Wilson',
+              avatar: 'assets/avatar1.png'
+            }
+          }
+        ]
+      },
+      {
+        id: 'col3',
+        name: 'Review',
+        count: 1,
+        color: '#FB923C', // orange
+        tasks: [
+          {
+            id: 6,
+            title: 'Create REST API documentation',
+            description: 'Document all API endpoints, request parameters, and response formats using Swagger.',
+            dueDate: '2023-08-05',
+            priority: 'Medium',
+            status: 'Review',
+            comments: 4,
+            assignee: {
+              name: 'Lisa Johnson',
+              avatar: 'assets/avatar2.png'
+            }
+          }
+        ]
+      },
+      {
+        id: 'col4',
+        name: 'Completed',
+        count: 2,
+        color: '#10B981', // emerald
+        tasks: [
+          {
+            id: 7,
+            title: 'Set up CI/CD pipeline',
+            description: 'Configure automated testing and deployment workflow using GitHub Actions.',
+            dueDate: '2023-08-01',
+            priority: 'High',
+            status: 'Completed',
+            comments: 0,
+            assignee: {
+              name: 'Alex Turner',
+              avatar: 'assets/avatar3.png'
+            }
+          },
+          {
+            id: 8,
+            title: 'Initial project setup',
+            description: 'Set up project structure, dependencies, and development environment configuration.',
+            dueDate: '2023-07-28',
+            priority: 'Medium',
+            status: 'Completed',
+            comments: 1,
+            assignee: {
+              name: 'Ryan Martinez',
+              avatar: 'assets/avatar4.png'
+            }
+          }
+        ]
+      }
+    ];
+  }
+
   setActiveTab(index: number) {
     this.activeTabIndex = index;
   }
   
   setActiveView(index: number) {
     this.activeViewIndex = index;
+    this.isCompactView = index === 1; // Assuming index 1 is compact view
   }
   
   onViewTaskDetails(taskId: number): void {
     this.selectedTaskId = taskId;
     console.log(`Viewing task details for task ${taskId}`);
+    
+    // Add a small delay to let the DOM update
+    if (this.isBrowser) {
+      setTimeout(() => {
+        // Handle mobile task details modal positioning
+        if (this.isMobileView) {
+          const taskModal = document.querySelector('.mobile-task-modal') as HTMLElement;
+          if (taskModal) {
+            taskModal.style.display = 'flex';
+            // Prevent body scrolling when modal is open
+            document.body.style.overflow = 'hidden';
+          }
+        } else {
+          // Handle desktop panel layout adjustment
+          const boardColumnsEl = document.querySelector('.board-columns') as HTMLElement;
+          if (boardColumnsEl) {
+            boardColumnsEl.style.width = 'calc(100% - 350px)';
+          }
+        }
+      }, 50);
+    }
   }
   
   closeTaskDetails(): void {
     this.selectedTaskId = null;
+    
+    if (this.isBrowser) {
+      // Re-enable body scrolling when modal is closed
+      document.body.style.overflow = '';
+      
+      // Reset board columns width for desktop view
+      if (!this.isMobileView) {
+        const boardColumnsEl = document.querySelector('.board-columns') as HTMLElement;
+        if (boardColumnsEl) {
+          boardColumnsEl.style.width = '100%';
+        }
+      }
+    }
   }
   
   getSelectedTask(): Task | null {
@@ -363,10 +413,17 @@ export class ProjectBoardComponent {
         id: newId,
         title: task.title,
         description: task.description,
-        tags: task.tags,
-        progress: '0/1', // Default progress
-        assignees: task.assignees || [],
+        dueDate: task.dueDate || new Date().toISOString().split('T')[0],
+        priority: task.priority || 'Medium',
+        status: task.status,
         comments: 0,
+        assignee: task.assignee || {
+          name: 'Unassigned',
+          avatar: 'assets/avatar1.png'
+        },
+        tags: task.tags || [],
+        progress: task.progress || '0/1',
+        assignees: task.assignees || [],
         attachments: task.attachments ? task.attachments.length : 0,
         views: 0
       };

@@ -90,7 +90,7 @@
     <div *ngIf="activeTabIndex === 1" class="board-container" [class.mobile-board]="isMobileView">
       <div class="board-columns" 
            [@staggerIn]="taskColumns.length" 
-           [class.with-details]="selectedTaskId !== null"
+           [class.with-details]="selectedTaskId !== null && !isMobileView"
            [class.board-columns-mobile]="isMobileView"
            [class.board-columns-responsive]="!isMobileView">
         <div *ngFor="let column of taskColumns; let colIndex = index" 
@@ -108,6 +108,7 @@
             <button class="menu-button">⋮</button>
           </div>
           
+          <!-- Task Card Section -->
           <div class="task-list" [class.no-scroll-mobile]="isMobileView">
             <app-task-card *ngFor="let task of column.tasks; let taskIndex = index" 
                          [task]="task" 
@@ -118,14 +119,30 @@
         </div>
       </div>
       
-      <!-- Task Details Panel -->
+      <!-- Task Details Panel for Desktop -->
       <app-task-details 
-        *ngIf="selectedTaskId !== null" 
+        *ngIf="selectedTaskId !== null && !isMobileView" 
         [taskId]="selectedTaskId"
         [task]="getSelectedTask()"
         (closePanel)="closeTaskDetails()"
-        [@slideInRight]>
+        [@slideInRight]
+        class="task-details-panel">
       </app-task-details>
+    </div>
+
+    <!-- Task Details Modal for Mobile -->
+    <div 
+      *ngIf="selectedTaskId !== null && isMobileView" 
+      class="mobile-task-modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      [@fadeInUp]>
+      <div class="mobile-task-modal-content bg-white dark:bg-gray-800 w-full h-full max-h-full overflow-auto rounded-t-xl">
+        <app-task-details 
+          [taskId]="selectedTaskId"
+          [task]="getSelectedTask()"
+          (closePanel)="closeTaskDetails()"
+          class="w-full h-full">
+        </app-task-details>
+      </div>
     </div>
     
     <!-- Notes Tab -->
