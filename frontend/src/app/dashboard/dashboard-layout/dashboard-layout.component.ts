@@ -16,6 +16,7 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
   isSidebarOpen = false;
   isCollapsed = false;
   isMobileView = false;
+  isCompactView = false;
   
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   
@@ -35,17 +36,27 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
   @HostListener('window:resize')
   onResize() {
     if (isPlatformBrowser(this.platformId)) {
-      this.checkScreenSize();
+      // Check mobile view
+      const wasMobile = this.isMobileView;
+      this.isMobileView = window.innerWidth < 768;
       
-      // Auto-close sidebar on mobile when resizing down
-      if (this.isMobileView && this.isSidebarOpen) {
-        this.isSidebarOpen = false;
+      // Auto switch to compact view on medium screens, but not on mobile
+      this.isCompactView = window.innerWidth < 992 && !this.isMobileView;
+      
+      // If transitioning from mobile to desktop, ensure sidebar state is correct
+      if (wasMobile && !this.isMobileView) {
+        this.isSidebarOpen = true;  // Always open on desktop
+        this.isCollapsed = window.innerWidth < 1280; // Collapsed on medium desktop
       }
       
-      // Auto-open sidebar on desktop when resizing up
-      if (!this.isMobileView && !this.isSidebarOpen) {
-        this.isSidebarOpen = true;
-        this.isCollapsed = window.innerWidth < 1280;
+      // If transitioning from desktop to mobile, ensure sidebar is closed
+      if (!wasMobile && this.isMobileView) {
+        this.isSidebarOpen = false; // Close sidebar on mobile by default
+      }
+      
+      // Update layout when task details panel is open
+      if (this.isSidebarOpen && !this.isMobileView) {
+        // ...existing code...
       }
     }
   }
@@ -58,6 +69,11 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+    
+    // On mobile, when opening sidebar, always ensure sidebar is expanded
+    if (this.isMobileView && this.isSidebarOpen) {
+      this.isCollapsed = false;
+    }
   }
   
   toggleCollapsedSidebar() {
@@ -69,5 +85,9 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     if (this.isMobileView) {
       this.isSidebarOpen = false;
     }
+  }
+
+  onToggleSidebar(): void {
+    this.toggleSidebar();
   }
 }

@@ -9,7 +9,6 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 
 export const routes: Routes = [
-  // Auth routes (no layout with header/sidebar)
   {
     path: '',
     children: [
@@ -39,7 +38,6 @@ export const routes: Routes = [
     ]
   },
   
-  // App routes (with layout including header/sidebar)
   {
     path: '',
     component: DashboardLayoutComponent,
