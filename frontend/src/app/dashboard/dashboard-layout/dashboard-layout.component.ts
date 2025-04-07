@@ -76,7 +76,11 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     }
   }
   
+  // Remove or update the toggleCollapsedSidebar method
+  // Now this method will only be used internally by other methods
+  // since the UI button has been removed
   toggleCollapsedSidebar() {
+    // Keep the logic for internal use by the logo click in sidebar
     this.isCollapsed = !this.isCollapsed;
   }
   
@@ -89,5 +93,14 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
 
   onToggleSidebar(): void {
     this.toggleSidebar();
+  }
+
+  // Add this method to handle sidebar toggle events from the sidebar component
+  handleSidebarToggle(isCollapsed: boolean) {
+    this.isCollapsed = isCollapsed;
+    // Make sure sidebar is open when toggling collapse state
+    if (!this.isMobileView) {
+      this.isSidebarOpen = true;
+    }
   }
 }

@@ -1,93 +1,50 @@
-<div class="project-board">
-  <div class="project-header" [@fadeInUp]>
-    <div class="project-title-container">
-      <div class="project-icon">
-        <i class="building-icon">🏢</i>
+<div class="project-board-container">
+  <!-- Project Board Header with Navigation Tabs -->
+  <div class="board-header bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div class="tab-navigation overflow-x-auto">
+      <div class="flex">
+        <button *ngFor="let tab of tabs; let i = index"
+                (click)="setActiveTab(i)"
+                (mouseenter)="hoveredTabIndex = i"
+                (mouseleave)="hoveredTabIndex = -1"
+                class="tab-button"
+                [class.active-tab]="activeTabIndex === i"
+                [class.hover-tab]="hoveredTabIndex === i && activeTabIndex !== i">
+          <span class="tab-text">{{ tab }}</span>
+        </button>
       </div>
-      <div class="project-info">
-        <h1 class="project-title">Piper Enterprise</h1>
-        <div class="project-progress">
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width]="'13%'"></div>
-          </div>
-          <span class="progress-text">13% complete</span>
+    </div>
+
+    <!-- Board View Options (only visible on Tasks tab) -->
+    <div *ngIf="activeTabIndex === 1" class="view-options">
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">View:</span>
+        <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+          <button *ngFor="let view of views; let i = index" 
+                  (click)="setActiveView(i)"
+                  (mouseenter)="hoveredViewIndex = i"
+                  (mouseleave)="hoveredViewIndex = -1"
+                  class="view-button"
+                  [class.active-view]="activeViewIndex === i"
+                  [class.hover-view]="hoveredViewIndex === i && activeViewIndex !== i">
+            <span class="view-icon">{{ viewIcons[i] }}</span>
+            <span class="view-text">{{ view }}</span>
+          </button>
         </div>
       </div>
     </div>
-    
-    <div class="project-team">
-      <div class="team-avatars">
-        <img *ngFor="let i of [1,2,3,4]; let idx = index" 
-             [src]="'assets/avatar' + i + '.png'" 
-             class="team-avatar" 
-             [style.zIndex]="4-idx"
-             [style.transitionDelay]="idx * 50 + 'ms'"
-             alt="Team member">
-        <div class="more-avatar">+3</div>
-      </div>
-      <button class="add-member-button">
-        <i class="plus-icon">+</i>
-        <span>Add Member</span>
-      </button>
-    </div>
   </div>
-  
-  <div class="project-navigation" [@fadeInUp]>
-    <div class="tabs">
-      <button *ngFor="let tab of tabs; let i = index" 
-              class="tab-button" 
-              [class.active]="i === activeTabIndex"
-              (click)="setActiveTab(i)"
-              [@pulseAnimation]="i === hoveredTabIndex ? 'active' : 'inactive'"
-              (mouseenter)="hoveredTabIndex = i"
-              (mouseleave)="hoveredTabIndex = -1">
-        {{ tab }}
-        <span class="tab-highlight" *ngIf="i === activeTabIndex"></span>
-      </button>
-      
-      <!-- Add Task button for mobile - positioned after tabs -->
-      <button 
-        class="tab-button add-task-mobile"
-        (click)="openTaskCreate('')"
-        [@pulseAnimation]="hoveredTabIndex === 999 ? 'active' : 'inactive'"
-        (mouseenter)="hoveredTabIndex = 999" 
-        (mouseleave)="hoveredTabIndex = -1">
-        <i class="plus-icon">+</i> Add Task
-      </button>
+
+  <!-- Content Area -->
+  <div class="board-content">
+    <!-- Overview Tab Content - Now shown by default -->
+    <div *ngIf="activeTabIndex === 0" [@fadeInUp]>
+      <app-overview-section></app-overview-section>
     </div>
-    
-    <div class="view-options" *ngIf="activeTabIndex === 1">
-      <!-- Add Task Button for desktop -->
-      <button 
-        class="add-task-btn view-button desktop-only"
-        (click)="openTaskCreate('')"
-        [@pulseAnimation]="hoveredViewIndex === -2 ? 'active' : 'inactive'"
-        (mouseenter)="hoveredViewIndex = -2" 
-        (mouseleave)="hoveredViewIndex = -1">
-        <i class="view-icon">+</i>
-        <span>Add Task</span>
-      </button>
-      
-      <!-- View options buttons -->
-      <button *ngFor="let view of views; let i = index"
-              class="view-button"
-              [class.active]="i === activeViewIndex"
-              (click)="setActiveView(i)"
-              [@pulseAnimation]="i === hoveredViewIndex ? 'active' : 'inactive'"
-              (mouseenter)="hoveredViewIndex = i" 
-              (mouseleave)="hoveredViewIndex = -1">
-        <i class="view-icon">{{ viewIcons[i] }}</i>
-        <span>{{ view }}</span>
-      </button>
-    </div>
-  </div>
-  
-  <div [@tabTransition]="activeTabIndex" class="tab-content">
-    <!-- Overview Tab -->
-    <app-overview-section *ngIf="activeTabIndex === 0" [@fadeInUp]></app-overview-section>
-    
-    <!-- Tasks Tab -->
+
+    <!-- Tasks Tab Content -->
     <div *ngIf="activeTabIndex === 1" class="board-container" [class.mobile-board]="isMobileView">
+      <!-- Task columns display for Board view -->
       <div class="board-columns" 
            [@staggerIn]="taskColumns.length" 
            [class.with-details]="selectedTaskId !== null && !isMobileView"
@@ -105,10 +62,9 @@
               <h3>{{ column.name }}</h3>
               <span class="task-count">{{ column.count }}</span>
             </div>
-            <button class="menu-button">⋮</button>
+            <button class="add-task-button" (click)="openTaskCreate(column.name)">+</button>
           </div>
           
-          <!-- Task Card Section -->
           <div class="task-list" [class.no-scroll-mobile]="isMobileView">
             <app-task-card *ngFor="let task of column.tasks; let taskIndex = index" 
                          [task]="task" 
@@ -130,32 +86,36 @@
       </app-task-details>
     </div>
 
-    <!-- Task Details Modal for Mobile -->
-    <div 
-      *ngIf="selectedTaskId !== null && isMobileView" 
-      class="mobile-task-modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      [@fadeInUp]>
-      <div class="mobile-task-modal-content bg-white dark:bg-gray-800 w-full h-full max-h-full overflow-auto rounded-t-xl">
-        <app-task-details 
-          [taskId]="selectedTaskId"
-          [task]="getSelectedTask()"
-          (closePanel)="closeTaskDetails()"
-          class="w-full h-full">
-        </app-task-details>
-      </div>
+    <!-- Notes Tab Content -->
+    <div *ngIf="activeTabIndex === 2" [@fadeInUp]>
+      <app-notes-section></app-notes-section>
     </div>
-    
-    <!-- Notes Tab -->
-    <app-notes-section *ngIf="activeTabIndex === 2" [@fadeInUp]></app-notes-section>
-    
-    <!-- Questions Tab -->
-    <app-questions-section *ngIf="activeTabIndex === 3" [@fadeInUp]></app-questions-section>
+
+    <!-- Questions Tab Content -->
+    <div *ngIf="activeTabIndex === 3" [@fadeInUp]>
+      <app-questions-section></app-questions-section>
+    </div>
+  </div>
+
+  <!-- Task Create Modal -->
+  <div *ngIf="showTaskCreate" class="modal-overlay">
+    <div class="modal-container">
+      <app-task-create (saveTask)="handleTaskSave($event)" (cancel)="showTaskCreate = false"></app-task-create>
+    </div>
+  </div>
+
+  <!-- Task Details Modal for Mobile -->
+  <div 
+    *ngIf="selectedTaskId !== null && isMobileView" 
+    class="mobile-task-modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    [@fadeInUp]>
+    <div class="mobile-task-modal-content bg-white dark:bg-gray-800 w-full h-full max-h-full overflow-auto rounded-t-xl">
+      <app-task-details 
+        [taskId]="selectedTaskId"
+        [task]="getSelectedTask()"
+        (closePanel)="closeTaskDetails()"
+        class="w-full h-full">
+      </app-task-details>
+    </div>
   </div>
 </div>
-
-<!-- Task Create Modal -->
-<app-task-create
-  [visible]="showTaskCreate"
-  (close)="showTaskCreate = false"
-  (saveTask)="handleTaskSave($event)">
-</app-task-create>

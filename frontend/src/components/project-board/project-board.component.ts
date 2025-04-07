@@ -112,7 +112,7 @@ interface TaskColumn {
 })
 export class ProjectBoardComponent implements OnInit {
   isCompactView = false;
-  activeTabIndex = 1; // Set to 1 to show tasks tab by default
+  activeTabIndex = 0; // Changed from 1 to 0 to show Overview tab by default
   activeViewIndex = 0;
   private isBrowser: boolean;
   hoveredTabIndex = -1;

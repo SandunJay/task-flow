@@ -150,6 +150,7 @@ main {
   border-right: 1px solid var(--border-primary, #e5e7eb);
   transition: width 0.3s ease, transform 0.3s ease;
   z-index: 40;
+  flex-shrink: 0;
 }
 
 .sidebar-open:not(.sidebar-mobile) {
@@ -205,35 +206,19 @@ main {
   background-color: var(--bg-subtle, #e5e7eb);
 }
 
+:host-context(.dark-theme) .mobile-sidebar-close {
+  color: var(--text-tertiary, #d1d5db);
+  background-color: var(--bg-tertiary, #374151);
+}
+
+:host-context(.dark-theme) .mobile-sidebar-close:hover {
+  background-color: var(--bg-subtle, #4b5563);
+}
+
 /* Sidebar toggle button */
 .sidebar-toggle-button {
-  position: absolute;
-  right: -10px;
-  top: 72px;
-  width: 20px;
-  height: 20px;
-  background-color: var(--bg-primary, white);
-  border: 1px solid var(--border-primary, #e5e7eb);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 5;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.sidebar-toggle-button:hover {
-  background-color: var(--bg-tertiary, #f3f4f6);
-}
-
-:host-context(.dark-theme) .sidebar-toggle-button {
-  background-color: var(--bg-secondary, #1f2937);
-  border-color: var(--border-primary, #374151);
-}
-
-:host-context(.dark-theme) .sidebar-toggle-button:hover {
-  background-color: var(--bg-tertiary, #374151);
+  /* Removed styles */
+  display: none;  /* Hide it completely */
 }
 
 .toggle-icon {
@@ -249,21 +234,23 @@ main {
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  transition: margin-left 0.3s ease;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  width: calc(100% - 70px);
 }
 
-.main-container.sidebar-open:not(.sidebar-mobile) {
-  margin-left: 0;
+.main-container.sidebar-open:not(.sidebar-collapsed) {
+  width: calc(100% - 250px);
 }
 
-.main-container.sidebar-collapsed:not(.sidebar-mobile) {
-  margin-left: 0;
+.main-container.sidebar-collapsed {
+  width: calc(100% - 70px);
 }
 
 /* Header */
 .header-container {
   position: relative;
   z-index: 40; /* Lower than sidebar and overlay */
+  width: 100%;
 }
 
 /* Content area */
@@ -271,6 +258,9 @@ main {
   flex: 1;
   overflow: auto;
   position: relative;
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  width: 100%;
 }
 
 /* Overlay for mobile sidebar */
@@ -316,6 +306,7 @@ main {
   }
   
   .main-container {
+    width: 100% !important;
     margin-left: 0 !important;
   }
   
@@ -333,5 +324,9 @@ main {
   /* Additional top padding for mobile sidebar */
   .sidebar-mobile {
     padding-top: 1rem;
+  }
+  
+  .content-container {
+    padding: 0; /* Ensure no padding on mobile too */
   }
 }

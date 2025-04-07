@@ -1,0 +1,67 @@
+<div [ngClass]="{'sidebar': true, 'sidebar-expanded': !collapsed, 'sidebar-collapsed': collapsed}"
+     [style.width]="isBrowser ? null : (collapsed ? '70px' : '250px')">
+     
+  <div class="logo-container" 
+       (click)="toggleSidebar()" 
+       [ngClass]="{'touch-ripple': isTouchDevice, 'desktop-only-clickable': isMobileDevice()}">
+    <div class="logo" 
+         [@pulseAnimation]="logoAnimState" 
+         (mouseenter)="setAnimState('logo', 'active')" 
+         (mouseleave)="setAnimState('logo', 'inactive')">
+      <i class="project-icon">📋</i>
+    </div>
+    <div *ngIf="!collapsed" class="logo-text fade-in">Projects</div>
+  </div>
+  
+  <div class="project-list">
+    <div 
+      *ngFor="let project of projects; let i = index" 
+      class="project-item" 
+      [ngClass]="{
+        'selected': project.selected, 
+        'collapsed-item': collapsed,
+        'touch-ripple': isTouchDevice
+      }"
+      [@highlightAnimation]="hoveredProjectIndex === i && !project.selected ? 'active' : 'inactive'"
+      (mouseenter)="hoveredProjectIndex = i"
+      (mouseleave)="hoveredProjectIndex = -1"
+      (click)="selectProject(project)">
+      
+      <div class="project-icon" 
+           [style.backgroundColor]="project.color"
+           [@pulseAnimation]="hoveredProjectIndex === i ? 'active' : 'inactive'">
+        <i>{{ project.icon }}</i>
+      </div>
+      <div *ngIf="!collapsed" class="project-name fade-in">
+        <span class="project-name-text">{{ project.name }}</span>
+        <span *ngIf="project.notifications" class="notification-badge">{{ project.notifications }}</span>
+      </div>
+      <button *ngIf="!collapsed" class="menu-button">⋮</button>
+    </div>
+  </div>
+  
+  <div class="sidebar-nav" [ngClass]="{'sidebar-nav-collapsed': collapsed}">
+    <button *ngFor="let nav of navItems; let i = index" 
+            class="nav-button"
+            [ngClass]="{'touch-ripple': isTouchDevice}"
+            [@highlightAnimation]="hoveredNavIndex === i ? 'active' : 'inactive'"
+            (mouseenter)="hoveredNavIndex = i"
+            (mouseleave)="hoveredNavIndex = -1">
+      <i class="nav-icon" [@pulseAnimation]="hoveredNavIndex === i ? 'active' : 'inactive'">{{nav.icon}}</i>
+      <span *ngIf="!collapsed" class="nav-text fade-in">{{nav.label}}</span>
+    </button>
+  </div>
+  
+  <div class="add-project" *ngIf="!collapsed">
+    <button class="add-project-button">
+      <i class="add-icon">+</i>
+      <span>Add Project</span>
+    </button>
+  </div>
+  
+  <div class="add-project-collapsed" *ngIf="collapsed">
+    <button class="add-project-button-collapsed">
+      <i class="add-icon">+</i>
+    </button>
+  </div>
+</div>
