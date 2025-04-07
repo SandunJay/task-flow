@@ -5,6 +5,7 @@ import { VerifyComponent } from './verify/verify.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardLayoutComponent } from './dashboard/dashboard-layout/dashboard-layout.component';
 import { ProjectBoardComponent } from '../components/project-board/project-board.component';
+import { NotesSectionComponent } from '../components/notes-section/notes-section.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 
@@ -37,7 +38,6 @@ export const routes: Routes = [
       }
     ]
   },
-  
   {
     path: '',
     component: DashboardLayoutComponent,
@@ -57,11 +57,14 @@ export const routes: Routes = [
         path: 'project-board/:id',
         component: ProjectBoardComponent,
         data: { animation: 'projectBoardDetail' } 
+      },
+      {
+        path: 'notes',
+        component: NotesSectionComponent,
+        data: { animation: 'notes' } 
       }
     ]
   },
-  
-  // Fallback route
   { 
     path: '**', 
     redirectTo: 'login' 
