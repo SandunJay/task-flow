@@ -40,7 +40,7 @@ interface Answer {
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './questions-section.component.html',
-  styleUrls: ['./questions-section.component.css'],
+  // styleUrls: ['./questions-section.component.css'],
   animations: [
     trigger('fadeIn', [
       transition(':enter', [

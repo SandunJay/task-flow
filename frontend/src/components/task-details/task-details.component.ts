@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './task-details.component.html',
-  styleUrls: ['./task-details.component.css']
+  styles: []
 })
 export class TaskDetailsComponent {
   @Input() taskId: number | null = null;

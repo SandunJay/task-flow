@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  // styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm: FormGroup;

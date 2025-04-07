@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
   animations: [
     trigger('pulseAnimation', [
       state('active', style({ transform: 'scale(1.1)' })),
@@ -29,7 +28,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationButtonState = 'inactive';
   profileButtonState = 'inactive';
   searchFocused = false;
-  currentTheme = 'light';
   private themeSubscription: Subscription | null = null;
   @Output() toggleSidebar = new EventEmitter<void>();
   isMobileView = false;
@@ -47,16 +45,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.checkMobileView();
       window.addEventListener('resize', this.onResize.bind(this));
       
-      // Initialize theme based on localStorage if available
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        // Apply saved theme immediately to avoid flash of wrong theme
-        this.applyTheme(savedTheme as 'light' | 'dark');
-      }
-      
       // Subscribe to theme changes
       this.themeSubscription = this.themeService.theme$.subscribe(theme => {
-        this.currentTheme = theme;
         this.applyTheme(theme);
       });
     }
@@ -73,40 +63,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * Apply theme classes to document
+   * Apply theme classes to document for Tailwind dark mode
    */
   private applyTheme(theme: 'light' | 'dark'): void {
     if (theme === 'dark') {
       this.renderer.addClass(this.document.documentElement, 'dark');
-      this.renderer.addClass(this.document.body, 'dark-theme');
-      
-      // Apply class to the host component for better CSS targeting
-      const headerElement = this.document.querySelector('app-header');
-      if (headerElement) {
-        this.renderer.addClass(headerElement, 'dark-theme');
-      }
     } else {
       this.renderer.removeClass(this.document.documentElement, 'dark');
-      this.renderer.removeClass(this.document.body, 'dark-theme');
-      
-      // Remove class from the host component
-      const headerElement = this.document.querySelector('app-header');
-      if (headerElement) {
-        this.renderer.removeClass(headerElement, 'dark-theme');
-      }
     }
-    
-    // Force a re-render by triggering a small DOM change
-    setTimeout(() => {
-      const appHeader = this.document.querySelector('app-header');
-      if (appHeader) {
-        // Force a repaint by making a trivial style change and reverting it
-        this.renderer.setStyle(appHeader, 'padding-top', '0.001px');
-        setTimeout(() => {
-          this.renderer.removeStyle(appHeader, 'padding-top');
-        }, 0);
-      }
-    }, 0);
   }
   
   activateButton(button: string) {

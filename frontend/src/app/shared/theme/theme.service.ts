@@ -30,8 +30,7 @@ export class ThemeService {
 
   setTheme(theme: Theme): void {
     if (this.isBrowser) {
-      document.body.classList.remove('light-theme', 'dark-theme');
-      document.body.classList.add(`${theme}-theme`);
+      // Update storage
       localStorage.setItem('theme', theme);
     }
     this.themeSubject.next(theme);

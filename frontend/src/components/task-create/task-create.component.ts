@@ -21,7 +21,7 @@ interface Task {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './task-create.component.html',
-  styleUrls: ['./task-create.component.css'],
+  // styleUrls: ['./task-create.component.css'],
   animations: [
     trigger('dialogAnimation', [
       transition(':enter', [

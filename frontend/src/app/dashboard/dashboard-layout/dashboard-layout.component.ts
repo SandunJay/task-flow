@@ -1,106 +1,157 @@
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, HostBinding } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { SidebarComponent } from '../../../components/sidebar/sidebar.component';
+import { Subscription } from 'rxjs';
+import { ThemeService } from '../../shared/theme/theme.service';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderComponent, SidebarComponent],
   templateUrl: './dashboard-layout.component.html',
-  styleUrls: ['./dashboard-layout.component.css']
+  styles: []
 })
 export class DashboardLayoutComponent implements OnInit, OnDestroy {
   // Sidebar state
   isSidebarOpen = false;
   isCollapsed = false;
   isMobileView = false;
-  isCompactView = false;
+  private isBrowser: boolean;
+  private resizeObserver?: ResizeObserver;
+  private themeSubscription?: Subscription;
   
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  // Host binding to apply dark theme class
+  @HostBinding('class.dark') isDarkTheme = false;
+  
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private themeService: ThemeService
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
   
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser) {
       this.checkScreenSize();
+      
       // Default sidebar state based on screen size
+      // On mobile, sidebar should be hidden by default
       this.isSidebarOpen = !this.isMobileView;
+      // Only collapse sidebar on medium screens (not mobile)
       this.isCollapsed = window.innerWidth < 1280 && window.innerWidth >= 768;
+      
+      // Subscribe to theme changes
+      this.themeSubscription = this.themeService.theme$.subscribe(theme => {
+        this.isDarkTheme = theme === 'dark';
+        
+        // Apply dark mode class to document for global styling
+        if (this.isDarkTheme) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      });
+      
+      // Use ResizeObserver for better performance than window resize events
+      this.setupResizeObserver();
     }
   }
   
   ngOnDestroy() {
-    // Cleanup if needed
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
+    }
   }
 
-  @HostListener('window:resize')
-  onResize() {
-    if (isPlatformBrowser(this.platformId)) {
-      // Check mobile view
-      const wasMobile = this.isMobileView;
-      this.isMobileView = window.innerWidth < 768;
+  private setupResizeObserver() {
+    if (this.isBrowser && window.ResizeObserver) {
+      this.resizeObserver = new ResizeObserver(entries => {
+        this.checkScreenSize();
+        
+        // If transitioning from mobile to desktop, ensure sidebar state is correct
+        if (!this.isMobileView) {
+          this.isSidebarOpen = true;  // Always open on desktop
+          this.isCollapsed = window.innerWidth < 1280; // Collapsed on medium desktop
+        }
+      });
       
-      // Auto switch to compact view on medium screens, but not on mobile
-      this.isCompactView = window.innerWidth < 992 && !this.isMobileView;
+      this.resizeObserver.observe(document.body);
+    } else {
+      // Fallback for browsers without ResizeObserver
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
+  }
+  
+  onResize() {
+    if (this.isBrowser) {
+      this.checkScreenSize();
       
       // If transitioning from mobile to desktop, ensure sidebar state is correct
-      if (wasMobile && !this.isMobileView) {
+      if (!this.isMobileView) {
         this.isSidebarOpen = true;  // Always open on desktop
         this.isCollapsed = window.innerWidth < 1280; // Collapsed on medium desktop
-      }
-      
-      // If transitioning from desktop to mobile, ensure sidebar is closed
-      if (!wasMobile && this.isMobileView) {
-        this.isSidebarOpen = false; // Close sidebar on mobile by default
-      }
-      
-      // Update layout when task details panel is open
-      if (this.isSidebarOpen && !this.isMobileView) {
-        // ...existing code...
       }
     }
   }
   
   checkScreenSize() {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser) {
+      const wasMobileView = this.isMobileView;
       this.isMobileView = window.innerWidth < 768;
+      
+      // If transitioning between mobile and desktop views, adjust sidebar state
+      if (wasMobileView !== this.isMobileView) {
+        if (this.isMobileView) {
+          // When entering mobile view, always close the sidebar
+          this.isSidebarOpen = false;
+        } else {
+          // When entering desktop view, always open the sidebar
+          this.isSidebarOpen = true;
+          // Only collapse on medium screens (tablet)
+          this.isCollapsed = window.innerWidth < 1280 && window.innerWidth >= 768;
+        }
+      }
     }
   }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
     
-    // On mobile, when opening sidebar, always ensure sidebar is expanded
-    if (this.isMobileView && this.isSidebarOpen) {
+    // On mobile, toggling only shows/hides sidebar, doesn't collapse
+    // On desktop, make sure we respect the collapsed state
+    if (!this.isMobileView) {
+      // Keep the existing collapsed state on desktop
+    } else {
+      // Always ensure sidebar is fully expanded when opened on mobile
       this.isCollapsed = false;
     }
   }
   
-  // Remove or update the toggleCollapsedSidebar method
-  // Now this method will only be used internally by other methods
-  // since the UI button has been removed
+  handleSidebarToggle(isCollapsed: boolean) {
+    // Only allow collapsing on desktop/tablet, not mobile
+    if (!this.isMobileView) {
+      this.isCollapsed = isCollapsed;
+      this.isSidebarOpen = true;
+    }
+  }
+  
   toggleCollapsedSidebar() {
-    // Keep the logic for internal use by the logo click in sidebar
     this.isCollapsed = !this.isCollapsed;
   }
   
-  // Close sidebar when clicking overlay (mobile only)
   closeSidebarOnOverlayClick() {
     if (this.isMobileView) {
       this.isSidebarOpen = false;
     }
   }
 
-  onToggleSidebar(): void {
+  onToggleSidebar() {
     this.toggleSidebar();
-  }
-
-  // Add this method to handle sidebar toggle events from the sidebar component
-  handleSidebarToggle(isCollapsed: boolean) {
-    this.isCollapsed = isCollapsed;
-    // Make sure sidebar is open when toggling collapse state
-    if (!this.isMobileView) {
-      this.isSidebarOpen = true;
-    }
   }
 }

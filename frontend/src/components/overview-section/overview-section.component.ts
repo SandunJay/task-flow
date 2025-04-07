@@ -35,7 +35,7 @@ interface TaskChart {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './overview-section.component.html',
-  styleUrls: ['./overview-section.component.css'],
+  // styleUrls: ['./overview-section.component.css'],
   animations: [
     trigger('fadeInUp', [
       transition(':enter', [
@@ -199,11 +199,31 @@ export class OverviewSectionComponent implements OnInit {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
   
+  // ngOnInit() {
+  //   // Subscribe to theme changes
+  //   if (this.isBrowser) {
+  //     this.themeService.theme$.subscribe(theme => {
+  //       this.currentTheme = theme;
+  //     });
+      
+  //     // Initialize with a slight delay to trigger animations
+  //     setTimeout(() => {
+  //       this.isChartVisible = true;
+  //     }, 500);
+  //   }
+  // }
+
   ngOnInit() {
     // Subscribe to theme changes
     if (this.isBrowser) {
       this.themeService.theme$.subscribe(theme => {
         this.currentTheme = theme;
+        // Optionally add a data attribute to the document for additional theme handling
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       });
       
       // Initialize with a slight delay to trigger animations
@@ -212,7 +232,7 @@ export class OverviewSectionComponent implements OnInit {
       }, 500);
     }
   }
-
+  
   getTrendIcon(trend?: 'up' | 'down' | 'neutral') {
     switch(trend) {
       case 'up': return '↑';
@@ -221,13 +241,21 @@ export class OverviewSectionComponent implements OnInit {
     }
   }
 
+  // getTrendClass(trend?: 'up' | 'down' | 'neutral') {
+  //   switch(trend) {
+  //     case 'up': return 'text-green-600';
+  //     case 'down': return 'text-red-600';
+  //     default: return 'text-gray-600';
+  //   }
+  // }
   getTrendClass(trend?: 'up' | 'down' | 'neutral') {
     switch(trend) {
-      case 'up': return 'text-green-600';
-      case 'down': return 'text-red-600';
-      default: return 'text-gray-600';
+      case 'up': return 'text-green-600 dark:text-green-400';
+      case 'down': return 'text-red-600 dark:text-red-400';
+      default: return 'text-gray-600 dark:text-gray-400';
     }
   }
+
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -241,10 +269,16 @@ export class OverviewSectionComponent implements OnInit {
     return days === 1 ? 'day' : 'days';
   }
 
+  // getDeadlineClass(days: number): string {
+  //   if (days <= 3) return 'text-red-600';
+  //   if (days <= 7) return 'text-yellow-600';
+  //   return 'text-green-600';
+  // }
+
   getDeadlineClass(days: number): string {
-    if (days <= 3) return 'text-red-600';
-    if (days <= 7) return 'text-yellow-600';
-    return 'text-green-600';
+    if (days <= 3) return 'text-red-600 dark:text-red-400';
+    if (days <= 7) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-green-600 dark:text-green-400';
   }
 
   // Add a helper method to calculate the left position for each chart segment

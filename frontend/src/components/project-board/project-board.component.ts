@@ -48,7 +48,7 @@ interface TaskColumn {
   ],
   standalone: true,
   templateUrl: './project-board.component.html',
-  styleUrls: ['./project-board.component.css'],
+  // styleUrls: ['./project-board.component.css'],
   animations: [
     trigger('staggerIn', [
       transition('* => *', [
@@ -106,6 +106,48 @@ interface TaskColumn {
       ]),
       transition(':leave', [
         animate('300ms ease-in', style({ transform: 'translateX(100%)' }))
+      ])
+    ]),
+    // Add missing fadeIn animation
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    // Fix fadeInUp animation if it exists or add it
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    // Add missing scaleIn animation
+    trigger('scaleIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.9)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ]),
+    // Add missing staggerIn animation
+    trigger('staggerIn', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(80, [
+            animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    // Add missing slideInRight animation
+    trigger('slideInRight', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0 }),
+        animate('300ms ease-out', style({ transform: 'translateX(0)', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ transform: 'translateX(100%)', opacity: 0 }))
       ])
     ])
   ]

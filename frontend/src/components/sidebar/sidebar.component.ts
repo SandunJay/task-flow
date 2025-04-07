@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Subscription } from 'rxjs';
+import { ThemeService } from '../../app/shared/theme/theme.service';
 
 interface ProjectItem {
   id: number;
@@ -18,11 +20,6 @@ interface ProjectItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   animations: [
-    trigger('slideInOut', [
-      state('expanded', style({ width: '250px' })),
-      state('collapsed', style({ width: '70px' })),
-      transition('expanded <=> collapsed', animate('300ms ease-in-out'))
-    ]),
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0 }),
@@ -39,7 +36,7 @@ interface ProjectItem {
         background: 'transparent'
       })),
       state('active', style({
-        background: 'linear-gradient(90deg, rgba(77, 111, 255, 0.15) 0%, rgba(77, 111, 255, 0) 100%)'
+        background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 100%)'
       })),
       transition('inactive <=> active', animate('300ms ease-in-out'))
     ]),
@@ -54,7 +51,7 @@ interface ProjectItem {
     ])
   ]
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
   @Input() collapsed = false;
   @Output() toggleEvent = new EventEmitter<boolean>();
   isBrowser = false;
@@ -62,8 +59,15 @@ export class SidebarComponent {
   hoveredNavIndex = -1;
   logoAnimState = 'inactive';
   isTouchDevice = false;
+  
+  // Theme tracking
+  isDarkMode = false;
+  private themeSubscription?: Subscription;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private themeService: ThemeService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
     // Detect touch devices
@@ -71,6 +75,19 @@ export class SidebarComponent {
       this.isTouchDevice = ('ontouchstart' in window) || 
         (navigator.maxTouchPoints > 0) || 
         ((navigator as any).msMaxTouchPoints > 0);
+    }
+  }
+
+  ngOnInit() {
+    // Subscribe to theme changes
+    this.themeSubscription = this.themeService.theme$.subscribe(theme => {
+      this.isDarkMode = theme === 'dark';
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
     }
   }
 
@@ -91,15 +108,27 @@ export class SidebarComponent {
   
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    // Auto-collapse sidebar on small screens
-    if (event.target.innerWidth <= 768 && !this.collapsed) {
+    // Only auto-collapse sidebar on medium screens, not mobile
+    if (event.target.innerWidth < 1280 && event.target.innerWidth >= 768 && !this.collapsed) {
       this.collapsed = true;
+      this.toggleEvent.emit(this.collapsed);
+    }
+    
+    // If screen gets wider than mobile breakpoint and sidebar is collapsed, expand it
+    if (event.target.innerWidth >= 768 && event.target.innerWidth < 1280 && !this.collapsed) {
+      this.collapsed = true;
+      this.toggleEvent.emit(this.collapsed);
+    }
+    
+    // If screen gets very wide, uncollapse sidebar
+    if (event.target.innerWidth >= 1280 && this.collapsed) {
+      this.collapsed = false;
       this.toggleEvent.emit(this.collapsed);
     }
   }
   
   toggleSidebar(): void {
-    // Only toggle sidebar on desktop, not on mobile
+    // Only toggle sidebar collapse state on desktop/tablet, not on mobile
     if (!this.isMobileDevice()) {
       this.collapsed = !this.collapsed;
       this.toggleEvent.emit(this.collapsed);

@@ -1,49 +1,27 @@
-/* Custom styles to enhance Tailwind */
 
-/* Make container scrollable on all screen sizes */
+/* Minimal custom styles - favoring Tailwind classes */
+
+/* Container styling */
 .notes-container {
-  height: 100%;
-  overflow-y: auto;
+  @apply h-full overflow-y-auto px-6 py-4 pb-16;
   scrollbar-width: thin;
-  padding: 1.5rem;
-  padding-bottom: 3rem; /* Increased bottom padding to ensure last note is visible */
   scrollbar-gutter: stable;
 }
 
-/* Enhanced scrollbar styling */
+/* Simplified scrollbar styling (using Tailwind where possible) */
 .notes-container::-webkit-scrollbar {
-  width: 6px;
+  @apply w-1.5;
 }
 
 .notes-container::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-transparent;
 }
 
 .notes-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  @apply bg-black/20 rounded-full dark:bg-white/20;
 }
 
-:host-context(.dark-theme) .notes-container::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Card hover effects */
-.notes-container .rounded-xl {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.notes-container .rounded-xl:hover {
-  transform: translateY(-2px);
-}
-
-/* Enhance form focus effects */
-input:focus, textarea:focus {
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
-  outline: none;
-}
-
-/* Line clamp for content */
+/* Line clamp utility */
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -51,63 +29,37 @@ input:focus, textarea:focus {
   overflow: hidden;
 }
 
-/* Enhanced background colors for dark mode */
+/* Dark mode colors for note backgrounds */
 :host-context(.dark-theme) .bg-amber-100 {
-  background-color: rgba(251, 191, 36, 0.2);
+  @apply bg-amber-900/30;
 }
 
 :host-context(.dark-theme) .bg-emerald-100 {
-  background-color: rgba(16, 185, 129, 0.2);
+  @apply bg-emerald-900/30;
 }
 
 :host-context(.dark-theme) .bg-sky-100 {
-  background-color: rgba(14, 165, 233, 0.2);
+  @apply bg-sky-900/30;
 }
 
 :host-context(.dark-theme) .bg-rose-100 {
-  background-color: rgba(244, 63, 94, 0.2);
+  @apply bg-rose-900/30;
 }
 
 :host-context(.dark-theme) .bg-violet-100 {
-  background-color: rgba(139, 92, 246, 0.2);
+  @apply bg-violet-900/30;
 }
 
-/* Fixed height for mobile screens */
+/* Mobile responsiveness */
 @media (max-width: 768px) {
   .notes-container {
-    height: calc(100vh - 180px);
-    padding: 1rem;
-    padding-bottom: 6rem; /* Increased bottom padding for mobile */
-    overflow-y: auto; /* Explicitly set overflow for mobile */
-  }
-  
-  /* Smaller grid gaps */
-  .gap-4 {
-    gap: 0.75rem !important;
+    @apply h-[calc(100vh-180px)] px-4 py-4 pb-24;
   }
 }
 
-/* Medium and large screens scrolling behavior */
+/* Medium and large screens */
 @media (min-width: 769px) {
   .notes-container {
-    height: calc(100vh - 120px);
-    padding-bottom: 4rem; /* Comfortable bottom padding on larger screens */
+    @apply h-[calc(100vh-120px)] pb-16;
   }
-}
-
-/* Improved button focus style */
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
-}
-
-/* Smooth color transition for labels */
-.rounded-full {
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-/* Enhanced dropdown menu animation */
-.group-hover\:opacity-100 {
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  transform-origin: top;
 }

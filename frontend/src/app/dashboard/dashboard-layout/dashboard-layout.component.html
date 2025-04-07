@@ -1,17 +1,21 @@
-<div class="dashboard-layout">
+<div class="flex h-screen w-full overflow-hidden">
   <!-- Sidebar Overlay - only visible on mobile when sidebar is open -->
   <div 
     *ngIf="isMobileView && isSidebarOpen" 
-    class="sidebar-overlay"
+    class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-40 transition-opacity duration-300"
     (click)="closeSidebarOnOverlayClick()">
   </div>
 
   <!-- Sidebar Container with responsive classes -->
-  <div class="sidebar-container" 
-       [class.sidebar-open]="isSidebarOpen" 
-       [class.sidebar-closed]="!isSidebarOpen"
-       [class.sidebar-collapsed]="isCollapsed && !isMobileView"
-       [class.sidebar-mobile]="isMobileView">
+  <div class="h-full bg-white dark:bg-gray-800 transition-all duration-300"
+       [ngClass]="{
+         'w-64 flex-shrink-0': isSidebarOpen && !isCollapsed && !isMobileView,
+         'w-16 flex-shrink-0': isSidebarOpen && isCollapsed && !isMobileView,
+         'w-0 overflow-hidden': !isSidebarOpen && !isMobileView,
+         'fixed top-0 left-0 h-full w-64 shadow-lg z-50': isMobileView,
+         'translate-x-0': isSidebarOpen && isMobileView,
+         '-translate-x-full': !isSidebarOpen && isMobileView
+       }">
     <app-sidebar 
        [collapsed]="isCollapsed && !isMobileView"
        (toggleEvent)="handleSidebarToggle($event)">
@@ -19,7 +23,7 @@
     
     <!-- Close button for mobile sidebar -->
     <button *ngIf="isMobileView && isSidebarOpen" 
-            class="mobile-sidebar-close"
+            class="absolute top-4 right-4 p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-110 z-10"
             (click)="closeSidebarOnOverlayClick()">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -28,17 +32,18 @@
   </div>
 
   <!-- Main Content Area -->
-  <div class="main-container" 
-       [class.sidebar-open]="isSidebarOpen" 
-       [class.sidebar-collapsed]="isCollapsed && !isMobileView">
+  <div class="flex flex-col flex-grow h-full overflow-hidden transition-all duration-300 bg-slate-50 dark:bg-gray-900"
+       [ngClass]="{
+         'ml-0': isMobileView || (isSidebarOpen && isCollapsed && !isMobileView)
+       }">
     
     <!-- Header with mobile menu toggle -->
-    <div class="header-container">
+    <div class="sticky top-0 z-30 bg-white dark:bg-gray-800  shadow-sm">
       <app-header (toggleSidebar)="onToggleSidebar()"></app-header>
     </div>
 
     <!-- Content Area -->
-    <div class="content-container">
+    <div class="flex-grow overflow-auto relative">
       <router-outlet></router-outlet>
     </div>
   </div>

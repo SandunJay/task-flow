@@ -1,12 +1,13 @@
-<div class="questions-container">
+
+  <div class="questions-container h-full overflow-y-auto pb-16 ">
     <!-- Section Header -->
-    <div [@fadeIn] class="mb-6">
+    <div [@fadeIn] class="sticky top-0 pl-4 pt-6 pb-4 bg-white dark:bg-gray-900 z-10 border-b border-gray-100 dark:border-gray-800 mb-6">
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Questions & Discussions</h1>
       <p class="text-gray-600 dark:text-gray-400">Ask questions, get answers, and share knowledge with your team</p>
     </div>
     
     <!-- Search and Filters -->
-    <div class="flex flex-col md:flex-row gap-4 mb-6 space-y-4 md:space-y-0">
+    <div class="flex flex-col md:flex-row gap-4 mb-8 space-y-4 md:space-y-0 px-4">
       <!-- Search Bar -->
       <div class="relative flex-grow">
         <input 
@@ -14,7 +15,7 @@
           [(ngModel)]="searchQuery"
           (ngModelChange)="filterQuestions()"
           placeholder="Search questions" 
-          class="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          class="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
         >
         <div class="absolute top-0 left-0 h-full flex items-center pl-3 text-gray-500 dark:text-gray-400">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,12 +24,12 @@
         </div>
       </div>
       
-      <div class="flex gap-2 flex-wrap md:flex-nowrap">
+      <div class="flex gap-3 flex-wrap md:flex-nowrap">
         <!-- Filter Dropdown -->
         <select 
           [(ngModel)]="selectedFilter" 
           (change)="filterQuestions()" 
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm"
         >
           <option value="all">All Questions</option>
           <option value="answered">Answered</option>
@@ -38,7 +39,7 @@
         <!-- Ask Question Button -->
         <button 
           (click)="toggleAddQuestion()" 
-          class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center"
+          class="px-4 py-2 bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center shadow-sm"
           [@pulse]="hoveredButtonId === 'ask-question' ? 'active' : 'inactive'"
           (mouseenter)="setHoveredButton('ask-question')"
           (mouseleave)="setHoveredButton(null)"
@@ -52,7 +53,7 @@
     </div>
     
     <!-- Tag Filter Pills -->
-    <div class="flex flex-wrap gap-2 mb-6">
+    <div class="flex flex-wrap gap-2 mb-8 px-4">
       <button 
         (click)="selectFilterTag('all')"
         [class.bg-indigo-100]="selectedTag === 'all'"
@@ -85,12 +86,12 @@
     </div>
     
     <!-- Add New Question Form -->
-    <div *ngIf="isAddingQuestion" [@slideDown] class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-6">
+    <div *ngIf="isAddingQuestion" [@slideDown] class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8 mx-4">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">New Question</h2>
         <button 
           (click)="toggleAddQuestion()" 
-          class="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400"
+          class="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 p-1"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -99,15 +100,15 @@
       </div>
       
       <div class="space-y-4">
-        <form [formGroup]="questionForm" class="space-y-4">
+        <form [formGroup]="questionForm" class="space-y-5">
           <!-- Title -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Title <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Title <span class="text-red-500">*</span></label>
             <input 
               type="text" 
               formControlName="title" 
               placeholder="What do you want to ask?" 
-              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
             >
             <div *ngIf="questionForm.get('title')?.invalid && questionForm.get('title')?.touched" class="text-red-500 text-sm mt-1">
               <span *ngIf="questionForm.get('title')?.errors?.['required']">Title is required</span>
@@ -117,12 +118,12 @@
           
           <!-- Content -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Details <span class="text-red-500">*</span></label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Details <span class="text-red-500">*</span></label>
             <textarea 
               formControlName="content" 
               rows="5" 
               placeholder="Provide more details about your question..." 
-              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
             ></textarea>
             <div *ngIf="questionForm.get('content')?.invalid && questionForm.get('content')?.touched" class="text-red-500 text-sm mt-1">
               <span *ngIf="questionForm.get('content')?.errors?.['required']">Details are required</span>
@@ -134,8 +135,13 @@
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Attachments</label>
             <div 
-              class="file-upload-area"
-              [class.drag-over]="isDragging"
+              class="file-upload-area border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition-colors"
+              [class.border-indigo-500]="isDragging"
+              [class.dark:border-indigo-400]="isDragging"
+              [class.bg-indigo-50]="isDragging"
+              [class.dark:bg-indigo-900]="isDragging && currentTheme === 'dark'"
+              [class.bg-gray-50]="!isDragging"
+              [class.dark:bg-gray-800]="!isDragging && currentTheme === 'dark'"
               (dragover)="onDragOver($event)"
               (dragleave)="onDragLeave($event)"
               (drop)="onDrop($event)"
@@ -159,18 +165,18 @@
                 Supported formats: JPEG, PNG, PDF, DOC, TXT (up to 10MB)
               </p>
             </div>
-
+  
             <!-- File Previews -->
             <div class="mt-4 space-y-2" *ngIf="uploadedFiles.length > 0">
-              <div class="file-preview" *ngFor="let file of uploadedFiles; let i = index">
-                <div class="file-icon">{{ getFileIcon(file) }}</div>
+              <div class="file-preview flex items-center p-2 bg-gray-50 dark:bg-gray-750 rounded-lg border border-gray-200 dark:border-gray-700" *ngFor="let file of uploadedFiles; let i = index">
+                <div class="file-icon p-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 mr-3">{{ getFileIcon(file) }}</div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ file.name }}</p>
                   <p class="text-xs text-gray-500 dark:text-gray-400">{{ getFileSize(file) }}</p>
                 </div>
                 <button 
                   type="button"
-                  class="text-gray-400 hover:text-red-500 transition-colors p-1"
+                  class="text-gray-400 hover:text-red-500 transition-colors p-1 ml-2"
                   (click)="removeFile(i); $event.stopPropagation();"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +189,7 @@
           
           <!-- Tags -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tags</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tags</label>
             <div class="flex flex-wrap gap-2">
               <button 
                 type="button"
@@ -226,7 +232,7 @@
     </div>
     
     <!-- No Questions Message -->
-    <div *ngIf="filteredQuestions.length === 0" class="flex flex-col items-center justify-center text-center py-10">
+    <div *ngIf="filteredQuestions.length === 0" class="flex flex-col items-center justify-center text-center py-16 px-4">
       <svg class="w-16 h-16 text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
@@ -244,15 +250,15 @@
     </div>
     
     <!-- Questions List -->
-    <div class="space-y-6 pb-16 md:pb-24" [@staggerList]="filteredQuestions.length">
+    <div class="space-y-6 pb-16 md:pb-24 px-4 " [@staggerList]="filteredQuestions.length">
       <div *ngFor="let question of filteredQuestions" 
-           class="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md p-5 transition-all" 
+           class="bg-slate-100 dark:bg-gray-700 rounded-xl shadow-sm hover:shadow-md p-6 transition-all dark:border-gray-200 border-gray-800" 
            [@fadeIn]>
         
         <!-- Question Header -->
-        <div class="flex items-start gap-3">
+        <div class="flex items-start gap-4">
           <div class="flex-shrink-0">
-            <img [src]="question.author.avatar" [alt]="question.author.name" class="w-10 h-10 rounded-full object-cover">
+            <img [src]="question.author.avatar" [alt]="question.author.name" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
           </div>
           
           <div class="flex-grow">
@@ -278,8 +284,8 @@
             </div>
             
             <!-- Tags -->
-            <div class="flex flex-wrap gap-2 mt-2">
-              <span *ngFor="let tag of question.tags" class="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <div class="flex flex-wrap gap-2 mt-3">
+              <span *ngFor="let tag of question.tags" class="px-2.5 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                 {{ tag }}
               </span>
             </div>
@@ -287,14 +293,14 @@
         </div>
         
         <!-- Question Content and Answers (Expandable) -->
-        <div *ngIf="question.isExpanded || isMobile" [@slideDown] class="mt-4">
+        <div *ngIf="question.isExpanded || isMobile" [@slideDown] class="mt-6 ">
           <!-- Question Content -->
-          <div class="text-gray-700 dark:text-gray-300 text-sm mb-4 p-3 bg-gray-50 dark:bg-gray-750 rounded-lg">
+          <div class="text-gray-700 dark:text-gray-300 text-sm mb-6 p-4 bg-gray-50 dark:bg-gray-500 rounded-lg border border-gray-100 dark:border-gray-700">
             {{ question.content }}
           </div>
           
           <!-- Answers Count -->
-          <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center justify-between mb-4">
             <h3 class="text-md font-medium text-gray-800 dark:text-gray-200">
               {{ question.answers.length }} {{ question.answers.length === 1 ? 'Answer' : 'Answers' }}
             </h3>
@@ -313,18 +319,18 @@
           </div>
           
           <!-- Answer Form -->
-          <div *ngIf="question.isAnswerFormVisible" [@slideDown] class="mb-4">
+          <div *ngIf="question.isAnswerFormVisible" [@slideDown] class="mb-6">
             <textarea 
               [id]="'answer-textarea-' + question.id"
               [(ngModel)]="newAnswer" 
               rows="3" 
               placeholder="Write your answer..." 
-              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 mb-2"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 mb-3 shadow-sm"
             ></textarea>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-3">
               <button 
                 (click)="toggleAnswerForm(question)" 
-                class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                class="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
               >
                 Cancel
               </button>
@@ -332,7 +338,7 @@
                 (click)="submitAnswer(question)" 
                 [disabled]="!newAnswer.trim()"
                 [class.opacity-50]="!newAnswer.trim()"
-                class="px-3 py-1 text-sm bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
+                class="px-4 py-2 text-sm bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
               >
                 Submit
               </button>
@@ -340,15 +346,18 @@
           </div>
           
           <!-- Answer List -->
-          <div *ngIf="question.answers.length > 0" class="space-y-4">
-            <div *ngFor="let answer of question.answers" class="border-l-2 pl-4" [class.border-green-500]="answer.isAccepted" [class.border-gray-300]="!answer.isAccepted" [class.dark:border-gray-700]="!answer.isAccepted">
+          <div *ngIf="question.answers.length > 0" class="space-y-6">
+            <div *ngFor="let answer of question.answers" class="border-l-2 pl-4 py-2" 
+                 [class.border-green-500]="answer.isAccepted" 
+                 [class.border-gray-300]="!answer.isAccepted && currentTheme !== 'dark'" 
+                 [class.dark:border-gray-700]="!answer.isAccepted && currentTheme === 'dark'">
               <!-- Answer Content -->
-              <div class="text-gray-700 dark:text-gray-300 text-sm">
+              <div class="text-gray-700 dark:text-gray-300 text-sm mb-3">
                 {{ answer.content }}
               </div>
               
               <!-- Answer Footer -->
-              <div class="flex items-center justify-between mt-2">
+              <div class="flex items-center justify-between">
                 <!-- Author Info -->
                 <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
                   <span>{{ answer.author.name }}</span>
@@ -363,7 +372,7 @@
                 </div>
                 
                 <!-- Answer Actions -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-4">
                   <!-- Upvote Button -->
                   <button 
                     (click)="toggleUpvote(answer)" 
@@ -399,7 +408,7 @@
         </div>
         
         <!-- Answer Count Preview (when collapsed) -->
-        <div *ngIf="!question.isExpanded && !isMobile" class="mt-3 text-sm text-gray-500 dark:text-gray-400 flex items-center cursor-pointer" (click)="toggleQuestionExpansion(question)">
+        <div *ngIf="!question.isExpanded && !isMobile" class="mt-4 text-sm text-gray-500 dark:text-gray-400 flex items-center cursor-pointer" (click)="toggleQuestionExpansion(question)">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
           </svg>
