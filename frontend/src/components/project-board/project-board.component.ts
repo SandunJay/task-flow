@@ -154,7 +154,7 @@ interface TaskColumn {
 })
 export class ProjectBoardComponent implements OnInit {
   isCompactView = false;
-  activeTabIndex = 0; // Changed from 1 to 0 to show Overview tab by default
+  activeTabIndex = 0; 
   activeViewIndex = 0;
   private isBrowser: boolean;
   hoveredTabIndex = -1;
@@ -172,13 +172,10 @@ export class ProjectBoardComponent implements OnInit {
   @HostListener('window:resize')
   onResize() {
     if (this.isBrowser) {
-      // Auto switch to compact view on smaller screens
       this.isCompactView = window.innerWidth < 992;
       this.isMobileView = window.innerWidth < 768;
       
-      // Update layout when task details panel is open
       if (this.selectedTaskId !== null) {
-        // Add a small delay to let the DOM update
         setTimeout(() => {
           const boardColumnsEl = document.querySelector('.board-columns') as HTMLElement;
           if (boardColumnsEl && !this.isMobileView) {
@@ -192,32 +189,25 @@ export class ProjectBoardComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
-    // Set initial view states
     if (this.isBrowser) {
       this.isCompactView = window.innerWidth < 992;
       this.isMobileView = window.innerWidth < 768;
     } else {
-      // Default for server-side rendering
       this.isCompactView = false;
       this.isMobileView = false;
     }
   }
 
   ngOnInit(): void {
-    // Initialize task data
     this.initializeTaskData();
     
     if (this.isBrowser) {
-      // Only check for mobile view in browser environment
       this.checkMobileView();
-      
-      // Add event listener for window resize only in browser
       window.addEventListener('resize', this.onResize.bind(this));
     }
   }
 
   ngOnDestroy(): void {
-    // Remove event listener to prevent memory leaks
     if (this.isBrowser) {
       window.removeEventListener('resize', this.onResize.bind(this));
     }
@@ -230,13 +220,12 @@ export class ProjectBoardComponent implements OnInit {
   }
 
   initializeTaskData(): void {
-    // Sample task data
     this.taskColumns = [
       {
         id: 'col1',
         name: 'To Do',
         count: 3,
-        color: '#A78BFA', // violet
+        color: '#A78BFA', 
         tasks: [
           {
             id: 1,
@@ -377,26 +366,22 @@ export class ProjectBoardComponent implements OnInit {
   
   setActiveView(index: number) {
     this.activeViewIndex = index;
-    this.isCompactView = index === 1; // Assuming index 1 is compact view
+    this.isCompactView = index === 1; 
   }
   
   onViewTaskDetails(taskId: number): void {
     this.selectedTaskId = taskId;
     console.log(`Viewing task details for task ${taskId}`);
     
-    // Add a small delay to let the DOM update
     if (this.isBrowser) {
       setTimeout(() => {
-        // Handle mobile task details modal positioning
         if (this.isMobileView) {
           const taskModal = document.querySelector('.mobile-task-modal') as HTMLElement;
           if (taskModal) {
             taskModal.style.display = 'flex';
-            // Prevent body scrolling when modal is open
             document.body.style.overflow = 'hidden';
           }
         } else {
-          // Handle desktop panel layout adjustment
           const boardColumnsEl = document.querySelector('.board-columns') as HTMLElement;
           if (boardColumnsEl) {
             boardColumnsEl.style.width = 'calc(100% - 350px)';
@@ -410,10 +395,8 @@ export class ProjectBoardComponent implements OnInit {
     this.selectedTaskId = null;
     
     if (this.isBrowser) {
-      // Re-enable body scrolling when modal is closed
       document.body.style.overflow = '';
       
-      // Reset board columns width for desktop view
       if (!this.isMobileView) {
         const boardColumnsEl = document.querySelector('.board-columns') as HTMLElement;
         if (boardColumnsEl) {
@@ -440,17 +423,12 @@ export class ProjectBoardComponent implements OnInit {
   
   handleTaskSave(task: any): void {
     console.log('New task created:', task);
-    // Here you would normally save the task to your backend
-    // For now, we'll just add it to the proper column
-    
-    // Find the column by status
+    // API call to save the task would go here
     const columnIndex = this.taskColumns.findIndex(column => column.name === task.status);
     
     if (columnIndex > -1) {
-      // Generate a new ID (in a real app, the backend would do this)
       const newId = Math.max(...this.taskColumns.flatMap(c => c.tasks.map(t => t.id))) + 1;
       
-      // Create the new task with the proper structure
       const newTask: Task = {
         id: newId,
         title: task.title,
@@ -470,7 +448,6 @@ export class ProjectBoardComponent implements OnInit {
         views: 0
       };
       
-      // Add to column and update count
       this.taskColumns[columnIndex].tasks.push(newTask);
       this.taskColumns[columnIndex].count = this.taskColumns[columnIndex].tasks.length;
     }

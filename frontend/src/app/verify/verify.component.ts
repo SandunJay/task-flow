@@ -28,8 +28,7 @@ export class VerifyComponent {
     if (this.verifyForm.valid) {
       this.isSubmitting = true;
       
-      // Here you would call your service to verify the code
-      // For now, we'll just simulate a successful verification
+      // API CALL TO VERIFY CODE
       setTimeout(() => {
         this.isSubmitting = false;
         this.router.navigate(['/dashboard']);
@@ -40,8 +39,7 @@ export class VerifyComponent {
   }
 
   resendCode() {
-    // Here you would call your service to resend a verification code
-    // For this example, we'll just show a success message
+    // IN ANY CASE OF EXPIRATION OR ERROR, RESEND THE CODE
     alert('Verification code has been resent to your email address.');
   }
 }

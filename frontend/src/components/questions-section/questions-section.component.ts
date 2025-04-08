@@ -408,7 +408,6 @@ export class QuestionsSectionComponent implements OnInit {
       this.filterQuestions();
       this.isAddingQuestion = false;
     } else {
-      // Mark all form controls as touched to display validation errors
       Object.keys(this.questionForm.controls).forEach(key => {
         const control = this.questionForm.get(key);
         control?.markAsTouched();
@@ -491,7 +490,6 @@ export class QuestionsSectionComponent implements OnInit {
   
   processFiles(files: FileList): void {
     Array.from(files).forEach(file => {
-      // Check file size and type
       if (file.size > this.maxFileSize) {
         console.error(`File ${file.name} is too large. Maximum size is ${this.maxFileSize / (1024 * 1024)}MB`);
         return;
@@ -502,7 +500,6 @@ export class QuestionsSectionComponent implements OnInit {
         return;
       }
       
-      // Add file to uploaded files
       this.uploadedFiles.push(file);
     });
   }

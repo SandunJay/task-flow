@@ -28,21 +28,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Subscribe to theme changes
     this.themeSubscription = this.themeService.theme$.subscribe(theme => {
       this.isDarkTheme = theme === 'dark';
     });
     
-    // Subscribe to router events to handle navigation properly
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        // Reset scroll position on navigation
         if (this.router.url === '/' && this.isBrowser) {
-          // Only enable scroll tracking on the landing page in browser context
           window.addEventListener('scroll', this.onWindowScroll.bind(this));
         } else if (this.isBrowser) {
-          // Remove scroll tracking on other pages, but only if in browser context
           window.removeEventListener('scroll', this.onWindowScroll.bind(this));
           this.showScrollTop = false;
         }
@@ -50,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Clean up subscriptions
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
     }
@@ -59,7 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.routerSubscription.unsubscribe();
     }
     
-    // Remove event listener only in browser context
     if (this.isBrowser) {
       window.removeEventListener('scroll', this.onWindowScroll.bind(this));
     }
@@ -77,9 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
-    // Only execute in browser environment
     if (this.isBrowser) {
-      // Show the button when scrolled down 300px from the top
       this.showScrollTop = window.scrollY > 300;
     }
   }

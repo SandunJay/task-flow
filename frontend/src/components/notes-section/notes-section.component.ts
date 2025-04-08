@@ -124,7 +124,6 @@ export class NotesSectionComponent implements OnInit {
   }
 
   initializeNotes(): void {
-    // Sample notes data
     this.notes = [
       {
         id: 1,

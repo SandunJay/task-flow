@@ -198,27 +198,11 @@ export class OverviewSectionComponent implements OnInit {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
-  
-  // ngOnInit() {
-  //   // Subscribe to theme changes
-  //   if (this.isBrowser) {
-  //     this.themeService.theme$.subscribe(theme => {
-  //       this.currentTheme = theme;
-  //     });
-      
-  //     // Initialize with a slight delay to trigger animations
-  //     setTimeout(() => {
-  //       this.isChartVisible = true;
-  //     }, 500);
-  //   }
-  // }
 
   ngOnInit() {
-    // Subscribe to theme changes
     if (this.isBrowser) {
       this.themeService.theme$.subscribe(theme => {
         this.currentTheme = theme;
-        // Optionally add a data attribute to the document for additional theme handling
         if (theme === 'dark') {
           document.documentElement.classList.add('dark');
         } else {
@@ -226,7 +210,6 @@ export class OverviewSectionComponent implements OnInit {
         }
       });
       
-      // Initialize with a slight delay to trigger animations
       setTimeout(() => {
         this.isChartVisible = true;
       }, 500);
@@ -241,13 +224,6 @@ export class OverviewSectionComponent implements OnInit {
     }
   }
 
-  // getTrendClass(trend?: 'up' | 'down' | 'neutral') {
-  //   switch(trend) {
-  //     case 'up': return 'text-green-600';
-  //     case 'down': return 'text-red-600';
-  //     default: return 'text-gray-600';
-  //   }
-  // }
   getTrendClass(trend?: 'up' | 'down' | 'neutral') {
     switch(trend) {
       case 'up': return 'text-green-600 dark:text-green-400';
@@ -269,19 +245,12 @@ export class OverviewSectionComponent implements OnInit {
     return days === 1 ? 'day' : 'days';
   }
 
-  // getDeadlineClass(days: number): string {
-  //   if (days <= 3) return 'text-red-600';
-  //   if (days <= 7) return 'text-yellow-600';
-  //   return 'text-green-600';
-  // }
-
   getDeadlineClass(days: number): string {
     if (days <= 3) return 'text-red-600 dark:text-red-400';
     if (days <= 7) return 'text-yellow-600 dark:text-yellow-400';
     return 'text-green-600 dark:text-green-400';
   }
 
-  // Add a helper method to calculate the left position for each chart segment
   getLeftPosition(index: number): number {
     return this.taskChartData
       .slice(0, index)

@@ -41,11 +41,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Check for mobile view
       this.checkMobileView();
       window.addEventListener('resize', this.onResize.bind(this));
       
-      // Subscribe to theme changes
       this.themeSubscription = this.themeService.theme$.subscribe(theme => {
         this.applyTheme(theme);
       });

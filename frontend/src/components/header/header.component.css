@@ -1,6 +1,4 @@
-/* Custom styles that can't be easily achieved with Tailwind alone */
 
-/* Ensure smooth theme transitions */
 :host * {
   transition: background-color 0.3s ease, 
               border-color 0.3s ease,
@@ -8,7 +6,6 @@
               box-shadow 0.3s ease;
 }
 
-/* Dark mode overrides - with high specificity to override Tailwind */
 :host-context(.dark-theme) .bg-white,
 :host-context(.dark-theme) [class*="bg-white"],
 .dark .bg-white,

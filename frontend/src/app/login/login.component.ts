@@ -30,9 +30,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isSubmitting = true;
       
-      // Simulate successful login
+      // API CALL TO LOGIN USER
       setTimeout(() => {
-        // Store authentication info in localStorage
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('user', JSON.stringify({
           email: this.loginForm.value.email,
@@ -47,11 +46,9 @@ export class LoginComponent {
         this.isSubmitting = false;
         console.log('Login successful, redirecting to dashboard...');
         
-        // Navigate to dashboard
         this.router.navigate(['/dashboard']).then(success => {
           if (!success) {
             console.error('Navigation to dashboard failed');
-            // Try project-board as fallback
             this.router.navigate(['/project-board']);
           }
         });

@@ -10,18 +10,16 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { Component } from '@angular/core';
 
-// Create an empty component for the root path
 @Component({
-  template: '' // Empty template as the content is in app.component.html
+  template: '' 
 })
 export class EmptyComponent {}
 
 export const routes: Routes = [
-  // Landing page route - path is empty string to match exactly "/"
   {
     path: '',
     pathMatch: 'full',
-    component: EmptyComponent, // Use EmptyComponent instead of null
+    component: EmptyComponent, 
   },
   // Auth routes
   {
@@ -77,6 +75,6 @@ export const routes: Routes = [
   },
   { 
     path: '**', 
-    redirectTo: '' // Redirect to landing page
+    redirectTo: '' // Redirect to landing 
   }
 ];

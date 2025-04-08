@@ -16,9 +16,7 @@ export class ThemeService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
-    // Only run browser-specific code if in browser environment
     if (this.isBrowser) {
-      // Check for user preference or saved theme
       const savedTheme = localStorage.getItem('theme') as Theme;
       if (savedTheme) {
         this.setTheme(savedTheme);
@@ -30,7 +28,6 @@ export class ThemeService {
 
   setTheme(theme: Theme): void {
     if (this.isBrowser) {
-      // Update storage
       localStorage.setItem('theme', theme);
     }
     this.themeSubject.next(theme);

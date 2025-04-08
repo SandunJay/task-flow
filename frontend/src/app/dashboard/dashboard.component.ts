@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styles: [] // No separate CSS file needed
+  styles: [] 
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private themeSubscription: Subscription | undefined;
@@ -21,15 +21,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to theme changes
     this.themeSubscription = this.themeService.theme$.subscribe(theme => {
       this.currentTheme = theme;
-      // You could add classes to the body or do other theme-related setup here if needed
     });
   }
 
   ngOnDestroy(): void {
-    // Clean up subscription
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
     }
@@ -40,11 +37,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    // Clear authentication data
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
-    
-    // Redirect to login page
     this.router.navigate(['/login']);
   }
 

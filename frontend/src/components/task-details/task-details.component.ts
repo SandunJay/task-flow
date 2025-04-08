@@ -79,7 +79,7 @@ export class TaskDetailsComponent {
   
   addComment(): void {
     if (this.newComment.trim()) {
-      // Logic to add a comment would go here
+      // API CALL TO ADD COMMENT
       this.newComment = '';
     }
   }

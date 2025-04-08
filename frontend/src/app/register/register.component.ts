@@ -39,8 +39,7 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.isSubmitting = true;
       
-      // Here you would call your authentication service to register the user
-      // For now, we'll just simulate a successful registration
+      // API CALL TO REGISTER USER
       setTimeout(() => {
         this.isSubmitting = false;
         this.router.navigate(['/verify']);

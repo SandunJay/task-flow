@@ -108,19 +108,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
   
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    // Only auto-collapse sidebar on medium screens, not mobile
     if (event.target.innerWidth < 1280 && event.target.innerWidth >= 768 && !this.collapsed) {
       this.collapsed = true;
       this.toggleEvent.emit(this.collapsed);
     }
     
-    // If screen gets wider than mobile breakpoint and sidebar is collapsed, expand it
     if (event.target.innerWidth >= 768 && event.target.innerWidth < 1280 && !this.collapsed) {
       this.collapsed = true;
       this.toggleEvent.emit(this.collapsed);
     }
     
-    // If screen gets very wide, uncollapse sidebar
     if (event.target.innerWidth >= 1280 && this.collapsed) {
       this.collapsed = false;
       this.toggleEvent.emit(this.collapsed);
@@ -128,14 +125,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   
   toggleSidebar(): void {
-    // Only toggle sidebar collapse state on desktop/tablet, not on mobile
     if (!this.isMobileDevice()) {
       this.collapsed = !this.collapsed;
       this.toggleEvent.emit(this.collapsed);
     }
   }
   
-  // Add a method to check if we're on a mobile device
   isMobileDevice(): boolean {
     return this.isBrowser && window.innerWidth < 768;
   }
