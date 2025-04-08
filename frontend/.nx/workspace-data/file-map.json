@@ -1,0 +1,378 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.7.1",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "frontend": [
+        {
+          "file": ".editorconfig",
+          "hash": "8037249353422744134"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "10175894702052279752"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "11934160580685414355"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17406702432687230417"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "10093397977228577162"
+        },
+        {
+          "file": "README.md",
+          "hash": "3255023541899148112"
+        },
+        {
+          "file": "angular.json",
+          "hash": "12028584312849915058"
+        },
+        {
+          "file": "components.json",
+          "hash": "3089158842223537119"
+        },
+        {
+          "file": "hooks/use-media-query.tsx",
+          "hash": "9292619743443485711"
+        },
+        {
+          "file": "hooks/use-mobile.tsx",
+          "hash": "2442114299154838863"
+        },
+        {
+          "file": "hooks/use-toast.ts",
+          "hash": "2289794502351068732"
+        },
+        {
+          "file": "lib/utils.ts",
+          "hash": "5792888722123482642"
+        },
+        {
+          "file": "original-4a79dc0519d1f236b2f3e873146b9f4d.png",
+          "hash": "400000536198784034"
+        },
+        {
+          "file": "original-4a79dc0519d1f236b2f3e873146b9f4d.webp",
+          "hash": "3840687333189775534"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "8828885123236086133"
+        },
+        {
+          "file": "package.json",
+          "hash": "16829282879046525189",
+          "deps": [
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@spartan-ng/cli",
+            "npm:@types/express",
+            "npm:@types/jasmine",
+            "npm:@types/node",
+            "npm:autoprefixer",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:postcss",
+            "npm:tailwindcss",
+            "npm:typescript",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/platform-server",
+            "npm:@angular/router",
+            "npm:@angular/ssr",
+            "npm:@tailwindcss/postcss",
+            "npm:express",
+            "npm:rxjs",
+            "npm:tslib",
+            "npm:zone.js"
+          ]
+        },
+        {
+          "file": "postcss.config.js",
+          "hash": "14186219912588415944"
+        },
+        {
+          "file": "public/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "spartan.module.ts",
+          "hash": "4182095437008273258"
+        },
+        {
+          "file": "src/app/app.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/app.component.html",
+          "hash": "15527581821235227904"
+        },
+        {
+          "file": "src/app/app.component.spec.ts",
+          "hash": "8908278546121417694"
+        },
+        {
+          "file": "src/app/app.component.ts",
+          "hash": "17034408500944705474"
+        },
+        {
+          "file": "src/app/app.config.server.ts",
+          "hash": "11311496158584606853"
+        },
+        {
+          "file": "src/app/app.config.ts",
+          "hash": "15829275207617704575"
+        },
+        {
+          "file": "src/app/app.routes.server.ts",
+          "hash": "17500618356136685777"
+        },
+        {
+          "file": "src/app/app.routes.ts",
+          "hash": "9867847063157122253"
+        },
+        {
+          "file": "src/app/dashboard/dashboard-layout/dashboard-layout.component.css",
+          "hash": "13065844631764466044"
+        },
+        {
+          "file": "src/app/dashboard/dashboard-layout/dashboard-layout.component.html",
+          "hash": "3992121293853804832"
+        },
+        {
+          "file": "src/app/dashboard/dashboard-layout/dashboard-layout.component.ts",
+          "hash": "9860551282268356221"
+        },
+        {
+          "file": "src/app/dashboard/dashboard.component.css",
+          "hash": "13065844631764466044"
+        },
+        {
+          "file": "src/app/dashboard/dashboard.component.html",
+          "hash": "16075970654552191746"
+        },
+        {
+          "file": "src/app/dashboard/dashboard.component.ts",
+          "hash": "7407803496138919787"
+        },
+        {
+          "file": "src/app/dashboard/tasks/tasks.component.ts",
+          "hash": "10389154449391301642"
+        },
+        {
+          "file": "src/app/home/page.component.ts",
+          "hash": "6567743850877162068"
+        },
+        {
+          "file": "src/app/home/page.tsx",
+          "hash": "5755062614737066162"
+        },
+        {
+          "file": "src/app/login/login.component.css",
+          "hash": "13065844631764466044"
+        },
+        {
+          "file": "src/app/login/login.component.html",
+          "hash": "15347894525718676812"
+        },
+        {
+          "file": "src/app/login/login.component.spec.ts",
+          "hash": "10730385221617188498"
+        },
+        {
+          "file": "src/app/login/login.component.ts",
+          "hash": "5375719683073029898"
+        },
+        {
+          "file": "src/app/register/register.component.css",
+          "hash": "13065844631764466044"
+        },
+        {
+          "file": "src/app/register/register.component.html",
+          "hash": "17490022404742000315"
+        },
+        {
+          "file": "src/app/register/register.component.ts",
+          "hash": "5538305885234982785"
+        },
+        {
+          "file": "src/app/test-tailwind/test-tailwind.component.ts",
+          "hash": "6491116634734224375"
+        },
+        {
+          "file": "src/app/ui/button/button.component.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/ui/card/card.component.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/ui/card/index.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/ui/index.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/verify/verify.component.css",
+          "hash": "13065844631764466044"
+        },
+        {
+          "file": "src/app/verify/verify.component.html",
+          "hash": "667297838900151436"
+        },
+        {
+          "file": "src/app/verify/verify.component.ts",
+          "hash": "17122086681289262337"
+        },
+        {
+          "file": "src/components/kanban-board.component.ts",
+          "hash": "17256683854146449691"
+        },
+        {
+          "file": "src/components/kanban-board.tsx",
+          "hash": "985184297338045017"
+        },
+        {
+          "file": "src/components/project-header.component.ts",
+          "hash": "16635940343600371156"
+        },
+        {
+          "file": "src/components/project-header.tsx",
+          "hash": "9183185731291853815"
+        },
+        {
+          "file": "src/components/project-management-dashboard.component.ts",
+          "hash": "2250286826927575773"
+        },
+        {
+          "file": "src/components/project-management-dashboard.tsx",
+          "hash": "12234254487740528258"
+        },
+        {
+          "file": "src/components/project-tabs.component.ts",
+          "hash": "13178716063842353183"
+        },
+        {
+          "file": "src/components/project-tabs.tsx",
+          "hash": "5709727781742889277"
+        },
+        {
+          "file": "src/components/sidebar.component.ts",
+          "hash": "6990686653172778112"
+        },
+        {
+          "file": "src/components/sidebar.tsx",
+          "hash": "9548329071062761044"
+        },
+        {
+          "file": "src/components/task-card.component.ts",
+          "hash": "4625380024681692593"
+        },
+        {
+          "file": "src/components/task-card.tsx",
+          "hash": "2958025288096407746"
+        },
+        {
+          "file": "src/components/theme-provider.tsx",
+          "hash": "1123208313791588746"
+        },
+        {
+          "file": "src/components/theme-toggle.tsx",
+          "hash": "5709727781742889277"
+        },
+        {
+          "file": "src/components/ui/button/button.component.ts",
+          "hash": "10764237224849916029"
+        },
+        {
+          "file": "src/components/ui/card/card.component.ts",
+          "hash": "3573344907085777910"
+        },
+        {
+          "file": "src/components/ui/card/index.ts",
+          "hash": "15058927710439499517"
+        },
+        {
+          "file": "src/components/ui/index.ts",
+          "hash": "4339580835104283275"
+        },
+        {
+          "file": "src/components/view-toggle.component.ts",
+          "hash": "18392624185071122687"
+        },
+        {
+          "file": "src/components/view-toggle.tsx",
+          "hash": "7677719074787746857"
+        },
+        {
+          "file": "src/index.html",
+          "hash": "4102008023669703430"
+        },
+        {
+          "file": "src/main.server.ts",
+          "hash": "9257623809215978365"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "4169901790405087765"
+        },
+        {
+          "file": "src/server.ts",
+          "hash": "18299644962406727620"
+        },
+        {
+          "file": "src/styles.css",
+          "hash": "1898867288680401559"
+        },
+        {
+          "file": "tailwind.config.js",
+          "hash": "14799602127798285588"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "10414011468447698778"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "5540552589929968073"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "11023685540591620072"
+        },
+        {
+          "file": "types/project.ts",
+          "hash": "11414133048392804001"
+        },
+        {
+          "file": "types/task.ts",
+          "hash": "15762581752004753779"
+        },
+        {
+          "file": "types/team-member.ts",
+          "hash": "3087474789352243409"
+        }
+      ]
+    },
+    "nonProjectFiles": []
+  }
+}

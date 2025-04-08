@@ -1,0 +1,81 @@
+
+:host * {
+  transition: background-color 0.3s ease, 
+              border-color 0.3s ease,
+              color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+:host-context(.dark-theme) .bg-white,
+:host-context(.dark-theme) [class*="bg-white"],
+.dark .bg-white,
+.dark-theme .bg-white {
+  background-color: #1f2937 !important;
+}
+
+:host-context(.dark-theme) .bg-gray-100,
+:host-context(.dark-theme) [class*="bg-gray-100"],
+.dark .bg-gray-100,
+.dark-theme .bg-gray-100 {
+  background-color: #374151 !important;
+}
+
+:host-context(.dark-theme) .text-gray-700,
+:host-context(.dark-theme) [class*="text-gray-700"],
+.dark .text-gray-700,
+.dark-theme .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+:host-context(.dark-theme) .text-gray-800,
+:host-context(.dark-theme) [class*="text-gray-800"],
+.dark .text-gray-800,
+.dark-theme .text-gray-800 {
+  color: #e5e7eb !important;
+}
+
+:host-context(.dark-theme) .border-gray-200,
+:host-context(.dark-theme) [class*="border-gray-200"],
+.dark .border-gray-200,
+.dark-theme .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+/* Force proper input styling in dark mode */
+:host-context(.dark-theme) input,
+.dark input,
+.dark-theme input {
+  color: #e5e7eb !important;
+  background-color: transparent !important;
+}
+
+:host-context(.dark-theme) input::placeholder,
+.dark input::placeholder,
+.dark-theme input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Additional styles for hover states in dark mode */
+:host-context(.dark-theme) .hover\:bg-gray-200:hover,
+.dark .hover\:bg-gray-200:hover,
+.dark-theme .hover\:bg-gray-200:hover {
+  background-color: #4b5563 !important;
+}
+
+/* Animation for notification badge pulse in addition to Tailwind's animate-pulse */
+@keyframes customPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Media query adjustments for small screens */
+@media (max-width: 480px) {
+  input::placeholder {
+    font-size: 13px;
+  }
+  
+  .gap-4 {
+    gap: 0.5rem !important;
+  }
+}
