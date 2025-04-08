@@ -1,0 +1,63 @@
+
+/* Container styling */
+.notes-container {
+  @apply h-full overflow-y-auto px-6 py-4 pb-16;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+
+/* Simplified scrollbar styling (using Tailwind where possible) */
+.notes-container::-webkit-scrollbar {
+  @apply w-1.5;
+}
+
+.notes-container::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.notes-container::-webkit-scrollbar-thumb {
+  @apply bg-black/20 rounded-full dark:bg-white/20;
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Dark mode colors for note backgrounds */
+:host-context(.dark-theme) .bg-amber-100 {
+  @apply bg-amber-900/30;
+}
+
+:host-context(.dark-theme) .bg-emerald-100 {
+  @apply bg-emerald-900/30;
+}
+
+:host-context(.dark-theme) .bg-sky-100 {
+  @apply bg-sky-900/30;
+}
+
+:host-context(.dark-theme) .bg-rose-100 {
+  @apply bg-rose-900/30;
+}
+
+:host-context(.dark-theme) .bg-violet-100 {
+  @apply bg-violet-900/30;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .notes-container {
+    @apply h-[calc(100vh-180px)] px-4 py-4 pb-24;
+  }
+}
+
+/* Medium and large screens */
+@media (min-width: 769px) {
+  .notes-container {
+    @apply h-[calc(100vh-120px)] pb-16;
+  }
+}
