@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './verify.component.html',
-  styleUrl: './verify.component.css'
+  // styleUrl: './verify.component.css'
 })
 export class VerifyComponent {
   verifyForm: FormGroup;

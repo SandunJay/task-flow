@@ -8,16 +8,25 @@ import { ProjectBoardComponent } from '../components/project-board/project-board
 import { NotesSectionComponent } from '../components/notes-section/notes-section.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
+import { Component } from '@angular/core';
+
+// Create an empty component for the root path
+@Component({
+  template: '' // Empty template as the content is in app.component.html
+})
+export class EmptyComponent {}
 
 export const routes: Routes = [
+  // Landing page route - path is empty string to match exactly "/"
+  {
+    path: '',
+    pathMatch: 'full',
+    component: EmptyComponent, // Use EmptyComponent instead of null
+  },
+  // Auth routes
   {
     path: '',
     children: [
-      { 
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'login'
-      },
       {
         path: 'login',
         component: LoginComponent,
@@ -38,6 +47,7 @@ export const routes: Routes = [
       }
     ]
   },
+  // Dashboard routes
   {
     path: '',
     component: DashboardLayoutComponent,
@@ -67,6 +77,6 @@ export const routes: Routes = [
   },
   { 
     path: '**', 
-    redirectTo: 'login' 
+    redirectTo: '' // Redirect to landing page
   }
 ];

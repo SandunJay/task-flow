@@ -78,6 +78,46 @@
            rounded-full w-9 h-9 flex items-center justify-center 
            transition-colors duration-300 text-gray-700 dark:text-gray-200 relative;
   }
+
+  /* Landing page animations */
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+  
+  .animate-fade-in-delay-200 {
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.2s forwards;
+  }
+  
+  .animate-fade-in-delay-400 {
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.4s forwards;
+  }
+  
+  .animate-fade-in-delay-staggered {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out calc(var(--index, 0) * 0.1s) forwards;
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-float-delayed {
+    animation: float 7s ease-in-out 1s infinite;
+  }
+  
+  .animate-float-slow {
+    animation: float 8s ease-in-out 2s infinite;
+  }
+  
+  .animate-pulse-subtle {
+    animation: subtlePulse 3s ease-in-out infinite;
+  }
 }
 
 @layer utilities {
@@ -86,5 +126,34 @@
     input::placeholder {
       font-size: 13px;
     }
+  }
+
+  /* Additional keyframes for landing page */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+    100% { transform: translateY(0px) scale(1); }
+  }
+  
+  @keyframes subtlePulse {
+    0% { opacity: 0.9; }
+    50% { opacity: 1; }
+    100% { opacity: 0.9; }
   }
 }
