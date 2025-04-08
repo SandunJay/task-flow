@@ -1,4 +1,4 @@
-package com.synapsecode.backend.service;
+package com.synapsecode.backend.service.impl;
 
 import com.synapsecode.backend.dto.UserDto;
 import com.synapsecode.backend.entity.Token;
@@ -10,6 +10,7 @@ import com.synapsecode.backend.exception.ResourceNotFoundException;
 import com.synapsecode.backend.mapper.UserMapper;
 import com.synapsecode.backend.repository.TokenRepository;
 import com.synapsecode.backend.repository.UserRepository;
+import com.synapsecode.backend.service.PasswordResetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;

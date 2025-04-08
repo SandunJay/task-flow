@@ -1,7 +1,8 @@
-package com.synapsecode.backend.service;
+package com.synapsecode.backend.service.impl;
 
 import com.synapsecode.backend.dto.UserDto;
-import com.synapsecode.backend.entity.User;
+import com.synapsecode.backend.entity.Task;
+import com.synapsecode.backend.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTaskNotificationEmail(UserDto user, String taskDetails) {
-
+    public void sendTaskNotificationEmail(UserDto user, Task taskDetails) {
+        Context context = new Context();
+        context.setVariable("name", user.email());
+        context.setVariable("title", taskDetails.getTitle());
+        context.setVariable("taskDetails", taskDetails.getDescription());
+        context.setVariable("due", taskDetails.getDueDate());
+        sendEmail(user.email(), "Task Notification", "TaskNotification", context);
     }
 
     private void sendEmail(String to, String subject, String templateName, Context context) {

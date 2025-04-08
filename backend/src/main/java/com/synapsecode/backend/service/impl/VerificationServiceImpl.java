@@ -1,10 +1,12 @@
-package com.synapsecode.backend.service;
+package com.synapsecode.backend.service.impl;
 
 import com.synapsecode.backend.entity.Token;
 import com.synapsecode.backend.entity.User;
 import com.synapsecode.backend.repository.UserRepository;
 import com.synapsecode.backend.response.ApiResponse;
 import com.synapsecode.backend.response.ResponseBuilder;
+import com.synapsecode.backend.service.TokenService;
+import com.synapsecode.backend.service.VerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

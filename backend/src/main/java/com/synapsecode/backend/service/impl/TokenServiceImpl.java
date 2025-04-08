@@ -1,11 +1,11 @@
-package com.synapsecode.backend.service;
+package com.synapsecode.backend.service.impl;
 
 import com.synapsecode.backend.entity.Token;
 import com.synapsecode.backend.entity.TokenType;
 import com.synapsecode.backend.entity.User;
-import com.synapsecode.backend.exception.ResourceNotFoundException;
 import com.synapsecode.backend.repository.TokenRepository;
 import com.synapsecode.backend.repository.UserRepository;
+import com.synapsecode.backend.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
