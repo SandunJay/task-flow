@@ -1,3 +1,4 @@
+
 <div class="h-full flex flex-col overflow-hidden">
   <!-- Project Board Header with Navigation Tabs -->
   <div class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
@@ -20,7 +21,6 @@
       </div>
     </div>
 
-    <!-- Board View Options (only visible on Tasks tab) -->
     <div *ngIf="activeTabIndex === 1" class="flex items-center space-x-2 px-4 hidden sm:flex">
       <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">View:</span>
       <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
@@ -46,17 +46,15 @@
   </div>
 
   <!-- Content Area -->
-  <div class="flex-1 overflow-hidden ">
+  <div class="flex-1 overflow-hidden">
     <!-- Overview Tab Content -->
     <div *ngIf="activeTabIndex === 0" [@fadeInUp] class="h-full">
       <app-overview-section></app-overview-section>
     </div>
 
     <!-- Tasks Tab Content -->
-    <div *ngIf="activeTabIndex === 1" 
-         class="h-[calc(100vh-180px)] p-6 md:p-4 overflow-auto " 
-         [class.pb-24]="isMobileView">
-           <!-- Tasks Header -->
+    <div *ngIf="activeTabIndex === 1" [@fadeInUp] class="h-[calc(100vh-180px)] p-6 md:p-4 overflow-auto" [class.pb-24]="isMobileView">
+      <!-- Tasks Header -->
       <div class="flex justify-between items-center mb-6">
         <div>
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Tasks</h1>
@@ -126,7 +124,7 @@
         [task]="getSelectedTask()"
         (closePanel)="closeTaskDetails()"
         [@slideInRight]
-        class="fixed top-[180px] right-0 bottom-0 w-[350px] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto shadow-lg">
+        class="absolute top-0 right-0 bottom-0 w-[350px] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto shadow-lg">
       </app-task-details>
     </div>
 
@@ -142,27 +140,27 @@
   </div>
 
   <!-- Task Create Modal -->
-  <div *ngIf="showTaskCreate" 
-       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div *ngIf="showTaskCreate" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 overflow-hidden">
       <app-task-create 
+        [visible]="showTaskCreate"
         (saveTask)="handleTaskSave($event)" 
-        (cancel)="showTaskCreate = false">
+        (close)="showTaskCreate = false">
       </app-task-create>
     </div>
   </div>
 
   <!-- Task Details Modal for Mobile -->
   <div *ngIf="selectedTaskId !== null && isMobileView" 
-       class="fixed inset-0 z-50 flex items-end bg-black bg-opacity-50"
-       [@fadeInUp]>
-    <div class="bg-white dark:bg-gray-800 w-full max-h-[90vh] overflow-auto rounded-t-xl animate-slide-up">
-      <app-task-details 
-        [taskId]="selectedTaskId"
-        [task]="getSelectedTask()"
-        (closePanel)="closeTaskDetails()"
-        class="w-full">
-      </app-task-details>
+    class="fixed inset-0 z-50 flex items-start pt-4 bg-black bg-opacity-50"
+    [@fadeInUp]>
+    <div class="bg-white dark:bg-gray-800 w-full h-[calc(100vh-16px)] overflow-auto rounded-t-xl animate-slide-up">
+    <app-task-details 
+    [taskId]="selectedTaskId"
+    [task]="getSelectedTask()"
+    (closePanel)="closeTaskDetails()"
+    class="w-full">
+    </app-task-details>
     </div>
   </div>
 </div>

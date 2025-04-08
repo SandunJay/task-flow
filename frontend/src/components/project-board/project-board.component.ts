@@ -48,7 +48,6 @@ interface TaskColumn {
   ],
   standalone: true,
   templateUrl: './project-board.component.html',
-  // styleUrls: ['./project-board.component.css'],
   animations: [
     trigger('staggerIn', [
       transition('* => *', [
@@ -108,28 +107,24 @@ interface TaskColumn {
         animate('300ms ease-in', style({ transform: 'translateX(100%)' }))
       ])
     ]),
-    // Add missing fadeIn animation
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0 }),
         animate('300ms ease-out', style({ opacity: 1 }))
       ])
     ]),
-    // Fix fadeInUp animation if it exists or add it
     trigger('fadeInUp', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(20px)' }),
         animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
-    // Add missing scaleIn animation
     trigger('scaleIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'scale(0.9)' }),
         animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
       ])
     ]),
-    // Add missing staggerIn animation
     trigger('staggerIn', [
       transition('* => *', [
         query(':enter', [
@@ -140,7 +135,6 @@ interface TaskColumn {
         ], { optional: true })
       ])
     ]),
-    // Add missing slideInRight animation
     trigger('slideInRight', [
       transition(':enter', [
         style({ transform: 'translateX(100%)', opacity: 0 }),
@@ -154,7 +148,9 @@ interface TaskColumn {
 })
 export class ProjectBoardComponent implements OnInit {
   isCompactView = false;
-  activeTabIndex = 0; 
+  
+  activeTabIndex: number = 0;
+  
   activeViewIndex = 0;
   private isBrowser: boolean;
   hoveredTabIndex = -1;
@@ -204,6 +200,9 @@ export class ProjectBoardComponent implements OnInit {
     if (this.isBrowser) {
       this.checkMobileView();
       window.addEventListener('resize', this.onResize.bind(this));
+      
+      // Explicitly set as number to avoid type issues
+      this.activeTabIndex = 0;
     }
   }
 
@@ -272,7 +271,7 @@ export class ProjectBoardComponent implements OnInit {
         id: 'col2',
         name: 'In Progress',
         count: 2,
-        color: '#38BDF8', // sky
+        color: '#38BDF8', 
         tasks: [
           {
             id: 4,
@@ -306,7 +305,7 @@ export class ProjectBoardComponent implements OnInit {
         id: 'col3',
         name: 'Review',
         count: 1,
-        color: '#FB923C', // orange
+        color: '#FB923C', 
         tasks: [
           {
             id: 6,
@@ -327,7 +326,7 @@ export class ProjectBoardComponent implements OnInit {
         id: 'col4',
         name: 'Completed',
         count: 2,
-        color: '#10B981', // emerald
+        color: '#10B981', 
         tasks: [
           {
             id: 7,
@@ -360,10 +359,14 @@ export class ProjectBoardComponent implements OnInit {
     ];
   }
 
+  // setActiveTab(index: number) {
+  //   this.activeTabIndex = index as number;
+  // }
+  
   setActiveTab(index: number) {
     this.activeTabIndex = index;
   }
-  
+
   setActiveView(index: number) {
     this.activeViewIndex = index;
     this.isCompactView = index === 1; 

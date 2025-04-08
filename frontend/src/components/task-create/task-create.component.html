@@ -1,16 +1,11 @@
-<div *ngIf="visible" 
-     class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
-     [class.dark-overlay]="(themeService.theme$ | async) === 'dark'"
-     [class.light-overlay]="(themeService.theme$ | async) === 'light'">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm dark:bg-black dark:bg-opacity-70"
+     [@dialogAnimation]>
   
-  <div [@dialogAnimation] 
-       class="rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
-       [class.theme-light]="(themeService.theme$ | async) === 'light'"
-       [class.theme-dark]="(themeService.theme$ | async) === 'dark'">
+  <div class="rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800">
     
     <!-- Header -->
-    <div class="flex justify-between items-center p-4 md:p-6 border-b theme-border">
-      <h2 class="text-xl md:text-2xl font-semibold theme-text">Add New Task</h2>
+    <div class="flex justify-between items-center p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">Add New Task</h2>
       <button (click)="onClose()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -30,7 +25,7 @@
             type="text"
             id="title"
             formControlName="title"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
             placeholder="Enter task title"
           />
           <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched" class="text-red-500 text-sm mt-1">
@@ -48,7 +43,7 @@
             id="description"
             formControlName="description"
             rows="4"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
             placeholder="Enter task description"
           ></textarea>
           <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched" class="text-red-500 text-sm mt-1">
@@ -66,7 +61,7 @@
               type="date"
               id="dueDate"
               formControlName="dueDate"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
             />
           </div>
           
@@ -76,19 +71,19 @@
             <div class="flex items-center space-x-2">
               <label class="flex items-center cursor-pointer">
                 <input type="radio" formControlName="priority" value="low" class="sr-only">
-                <div [ngClass]="{'bg-green-100 border-green-500 text-green-800': taskForm.get('priority')?.value === 'low', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'low'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
+                <div [ngClass]="{'bg-green-100 border-green-500 text-green-800 dark:bg-green-900 dark:border-green-700 dark:text-green-300': taskForm.get('priority')?.value === 'low', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'low'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
                   Low
                 </div>
               </label>
               <label class="flex items-center cursor-pointer">
                 <input type="radio" formControlName="priority" value="medium" class="sr-only">
-                <div [ngClass]="{'bg-yellow-100 border-yellow-500 text-yellow-800': taskForm.get('priority')?.value === 'medium', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'medium'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
+                <div [ngClass]="{'bg-yellow-100 border-yellow-500 text-yellow-800 dark:bg-yellow-900 dark:border-yellow-700 dark:text-yellow-300': taskForm.get('priority')?.value === 'medium', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'medium'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
                   Medium
                 </div>
               </label>
               <label class="flex items-center cursor-pointer">
                 <input type="radio" formControlName="priority" value="high" class="sr-only">
-                <div [ngClass]="{'bg-red-100 border-red-500 text-red-800': taskForm.get('priority')?.value === 'high', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'high'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
+                <div [ngClass]="{'bg-red-100 border-red-500 text-red-800 dark:bg-red-900 dark:border-red-700 dark:text-red-300': taskForm.get('priority')?.value === 'high', 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300': taskForm.get('priority')?.value !== 'high'}" class="px-3 py-1 border rounded-md cursor-pointer hover:bg-opacity-90 transition-colors">
                   High
                 </div>
               </label>
@@ -101,12 +96,12 @@
             <select
               id="status"
               formControlName="status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
             >
               <option value="To Do">To Do</option>
               <option value="In Progress">In Progress</option>
-              <option value="Need Review">Need Review</option>
-              <option value="Done">Done</option>
+              <option value="Review">Review</option>
+              <option value="Completed">Completed</option>
             </select>
           </div>
         </div>
@@ -117,9 +112,9 @@
           <div class="flex flex-wrap gap-2">
             <div 
               *ngFor="let tag of availableTags" 
-              [ngClass]="{'bg-opacity-100': isTagSelected(tag), 'bg-opacity-40 hover:bg-opacity-60': !isTagSelected(tag)}"
+              [ngClass]="{'opacity-100 shadow-md': isTagSelected(tag), 'opacity-70 hover:opacity-90': !isTagSelected(tag)}"
               [style.backgroundColor]="tag.color"
-              class="px-3 py-1 rounded-full text-white text-sm cursor-pointer transition-all hover:shadow-md"
+              class="px-3 py-1 rounded-full text-white text-sm cursor-pointer transition-all duration-300"
               (click)="onTagSelect(tag)"
             >
               {{ tag.name }}
@@ -133,8 +128,8 @@
           <div class="flex flex-wrap gap-3">
             <div 
               *ngFor="let assignee of availableAssignees" 
-              [ngClass]="{'ring-2 ring-indigo-500': isAssigneeSelected(assignee)}"
-              class="flex items-center p-2 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+              [ngClass]="{'ring-2 ring-indigo-500 bg-indigo-50 dark:bg-indigo-900 dark:bg-opacity-20': isAssigneeSelected(assignee)}"
+              class="flex items-center p-2 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300"
               (click)="onAssigneeToggle(assignee)"
             >
               <div class="relative">
@@ -156,7 +151,7 @@
             (dragleave)="onDragLeave($event)" 
             (drop)="onDrop($event)" 
             [ngClass]="{'bg-indigo-50 border-indigo-300 dark:bg-indigo-900 dark:bg-opacity-20': isDragging, 'bg-gray-50 border-gray-300 dark:bg-gray-800 dark:border-gray-700': !isDragging}"
-            class="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors"
+            class="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors duration-300"
           >
             <div class="space-y-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -171,7 +166,7 @@
                 id="fileUpload"
                 accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
               >
-              <label for="fileUpload" class="inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition-colors">
+              <label for="fileUpload" class="inline-block px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition-colors duration-300">
                 Select files
               </label>
             </div>
@@ -189,7 +184,7 @@
                 <button 
                   type="button" 
                   (click)="removeFile(i)" 
-                  class="text-red-500 hover:text-red-700 focus:outline-none"
+                  class="text-red-500 hover:text-red-700 focus:outline-none transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -205,15 +200,15 @@
           <button
             type="button"
             (click)="onClose()"
-            class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            class="px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
           >
             Cancel
           </button>
           <button
             type="submit"
             [disabled]="taskForm.invalid"
-            [ngClass]="{'opacity-50 cursor-not-allowed': taskForm.invalid, 'hover:bg-indigo-700': !taskForm.invalid}"
-            class="px-4 py-2 bg-indigo-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            [ngClass]="{'opacity-50 cursor-not-allowed': taskForm.invalid, 'hover:bg-indigo-700 dark:hover:bg-indigo-500': !taskForm.invalid}"
+            class="px-4 py-2 bg-indigo-600 dark:bg-indigo-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
           >
             Create Task
           </button>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, Inject, PLATFORM_ID, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -21,7 +21,6 @@ interface Task {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './task-create.component.html',
-  // styleUrls: ['./task-create.component.css'],
   animations: [
     trigger('dialogAnimation', [
       transition(':enter', [
