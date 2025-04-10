@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/password-reset")
-    public ResponseEntity<?> initiatePasswordReset(@RequestBody PasswordResetRequest request) {
+    public ResponseEntity<String> initiatePasswordReset(@RequestBody PasswordResetRequest request) {
         passwordResetService.initiatePasswordReset(request.email());
         return ResponseEntity.ok("Password reset email sent");
     }

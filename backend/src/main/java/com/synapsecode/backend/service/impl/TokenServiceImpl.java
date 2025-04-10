@@ -37,7 +37,6 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void saveToken(String token, User user, TokenType tokenType, long expirationSeconds) {
         String key = createTokenKey(token, tokenType);
-//        redisTemplate.opsForValue().set(key, user.getEmail(), Duration.ofSeconds(expirationSeconds));
         Map<String, String> tokenData = new HashMap<>();
         tokenData.put("email", user.getEmail());
         tokenData.put("tokenType", tokenType.name());
@@ -49,20 +48,6 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Optional<Token> validateToken(String token, TokenType tokenType) {
         String key = createTokenKey(token, tokenType);
-//        String value = redisTemplate.opsForValue().get(key);
-//
-//        if (value == null) {
-//            return Optional.empty();
-//        }
-//
-//        Token tokenVal = tokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("a","b","sdfsd"));
-//        if (tokenVal.getExpiryDate().isBefore(LocalDateTime.now())) {
-//            deleteToken(token);
-//            return Optional.empty();
-//        }
-//
-//        return Optional.of(tokenVal);
-//        @SuppressWarnings("unchecked")
         Map<String, String> tokenData = (Map<String, String>) redisTemplate.opsForValue().get(key);
 
         if (tokenData == null) {

@@ -50,7 +50,23 @@ public class Task {
     @JoinColumn(name = "user_id", nullable = false)
     private User createdBy;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
     @CreatedDate
     private LocalDateTime createdAt;
+
+    // Method to add a subtask to this task
+    public void addSubTask(SubTask subTask) {
+        subTasks.add(subTask);
+        subTask.setParentTask(this);
+    }
+
+    // Method to remove a subtask from this task
+    public void removeSubTask(SubTask subTask) {
+        subTasks.remove(subTask);
+        subTask.setParentTask(null);
+    }
 
 }

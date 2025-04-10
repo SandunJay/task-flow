@@ -2,6 +2,7 @@ package com.synapsecode.backend.dto;
 
 import com.synapsecode.backend.entity.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,5 +13,6 @@ public record TaskRequest(
         TaskStatus status,
         LocalDateTime dueDate,
         List<Long> assigneeIds,
-        List<SubTaskRequest> subTasks
+        List<SubTaskRequest> subTasks,
+        @NotNull Long projectId
 ) {}

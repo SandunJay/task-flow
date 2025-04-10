@@ -5,7 +5,7 @@ import com.synapsecode.backend.dto.*;
 import com.synapsecode.backend.entity.TokenType;
 import com.synapsecode.backend.entity.User;
 import com.synapsecode.backend.events.RegistrationCompleteEvent;
-import com.synapsecode.backend.exception.ResourceNotFoundException;
+import com.synapsecode.backend.exception.DuplicateResourceException;
 import com.synapsecode.backend.mapper.UserMapper;
 import com.synapsecode.backend.repository.TokenRepository;
 import com.synapsecode.backend.repository.UserRepository;
@@ -37,39 +37,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final ApplicationEventPublisher eventPublisher;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-    private final RedisTemplate redisTemplate;
     private final TokenService tokenService;
     private final UserMapper userMapper;
-
-//    @Override
-//    @Transactional
-//    public RegResponse register(RegisterRequest request) {
-//        if (userRepository.existsByEmail(request.email())) {
-//            throw new ResourceNotFoundException("User", "email", request.email());
-//        }
-//
-//        User user = User.builder()
-//                .email(request.email())
-//                .password(passwordEncoder.encode(request.password()))
-//                .enabled(false)
-//                .build();
-//
-//        userRepository.save(user);
-//        String verificationToken = tokenService.generateToken(user, TokenType.VERIFICATION, 24 * 60 * 60); // 24 hours
-//        tokenService.saveToken(verificationToken, user, TokenType.VERIFICATION, 24 * 60 * 60);
-//
-//        eventPublisher.publishEvent(new RegistrationCompleteEvent(user, verificationToken));
-//        return RegResponse.builder()
-//                .status("Success")
-//                .message("Registration Success")
-//                .build();
-//    }
 
     @Override
     @Transactional
     public RegResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new ResourceNotFoundException("User", "email", request.email());
+            throw new DuplicateResourceException("User", "email", request.email());
         }
 
         User user = userMapper.toEntity(request);
@@ -105,6 +80,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (jwtUtils.isTokenValid(refreshToken, user)) {
             String newAccessToken = jwtUtils.generateAccessToken(user);
+//            NEED TO IMPLEMENT TOKEN REVOCATION PROCESS
+            long refreshTokenExpirationSeconds = jwtUtils.getAccessTokenExpirationMs() / 1000;
+            tokenService.saveToken(refreshToken, user, TokenType.ACCESS, refreshTokenExpirationSeconds);
+
             return new AuthResponse(
                     newAccessToken,
                     refreshToken,

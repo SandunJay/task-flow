@@ -20,7 +20,6 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${application.security.jwt.secret-key}")
     private String jwtSecret;
@@ -78,7 +77,7 @@ public class JwtUtils {
                 .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
+                .getPayload();
     }
 
     private Key getSignInKey() {
