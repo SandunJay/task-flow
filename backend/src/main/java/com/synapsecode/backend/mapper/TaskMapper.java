@@ -15,8 +15,6 @@ import org.mapstruct.factory.Mappers;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
 
-    TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
-
     // Map Task entity to TaskResponse
     @Mapping(target = "subTasks", source = "subTasks")
     @Mapping(target = "assignees", source = "assignees")

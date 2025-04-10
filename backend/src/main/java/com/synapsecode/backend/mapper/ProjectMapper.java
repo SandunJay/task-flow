@@ -15,9 +15,6 @@ import org.mapstruct.factory.Mappers;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProjectMapper {
 
-    // An instance (optional when using componentModel="spring")
-    ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
-
     // Map Project entity to ProjectResponse
     @Mapping(target = "tasks", source = "tasks")
     @Mapping(target = "createdBy", source = "createdBy")
