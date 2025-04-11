@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ThemeService } from '../shared/theme/theme.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../shared/services/auth_service.service';
+import { useAuthStore } from '../shared/store/zus_auth_store.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
-  styles: [] 
+  styles: []
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private themeSubscription: Subscription | undefined;
@@ -17,7 +19,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +43,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
+    this.authService.logout()
+    useAuthStore.getState().setAuthenticated(true);
   }
 
   toggleTheme(): void {

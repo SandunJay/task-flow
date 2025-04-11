@@ -1,6 +1,10 @@
 package com.synapsecode.backend.controller;
 
 import com.synapsecode.backend.dto.*;
+import com.synapsecode.backend.exception.AuthenticationFailedException;
+import com.synapsecode.backend.exception.ResourceNotFoundException;
+import com.synapsecode.backend.response.ApiResponse;
+import com.synapsecode.backend.response.ResponseBuilder;
 import com.synapsecode.backend.service.AuthenticationService;
 import com.synapsecode.backend.service.PasswordResetService;
 import com.synapsecode.backend.service.VerificationService;
@@ -24,8 +28,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
+        try {
+            AuthResponse response = authenticationService.authenticate(request);
+            return ResponseEntity.ok(ResponseBuilder.success("Login successful", response));
+        } catch (AuthenticationFailedException ex) {
+            return ResponseEntity.status(401)
+                    .body((ApiResponse<AuthResponse>) ResponseBuilder.error("INVALID_CREDENTIALS", ex.getMessage()));
+        }
     }
 
     @GetMapping("/verify")

@@ -1,5 +1,5 @@
 package com.synapsecode.backend.entity;
 
 public enum ProjectStatus {
-    ACTIVE, IN_PROGRESS, COMPLETED, ARCHIVED
+    PLANNED,ACTIVE, IN_PROGRESS, COMPLETED, ON_HOLD, ARCHIVED
 }

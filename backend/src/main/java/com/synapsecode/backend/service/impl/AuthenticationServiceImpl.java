@@ -5,7 +5,9 @@ import com.synapsecode.backend.dto.*;
 import com.synapsecode.backend.entity.TokenType;
 import com.synapsecode.backend.entity.User;
 import com.synapsecode.backend.events.RegistrationCompleteEvent;
+import com.synapsecode.backend.exception.AuthenticationFailedException;
 import com.synapsecode.backend.exception.DuplicateResourceException;
+import com.synapsecode.backend.exception.ResourceNotFoundException;
 import com.synapsecode.backend.mapper.UserMapper;
 import com.synapsecode.backend.repository.TokenRepository;
 import com.synapsecode.backend.repository.UserRepository;
@@ -64,12 +66,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponse authenticate(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = (User) authentication.getPrincipal();
-        return generateAuthResponse(user);
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", request.email()));
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return generateAuthResponse(user);
+        } catch (org.springframework.security.authentication.BadCredentialsException ex) {
+            throw new AuthenticationFailedException("Invalid credentials");
+        }
     }
 
     @Override

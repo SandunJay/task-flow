@@ -1,0 +1,125 @@
+<div *ngIf="isOpen" class="modal-container" [@backdropAnimation]>
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+
+  <div class="modal-content" [@modalAnimation]>
+    <div class="modal-header">
+      <h3 class="modal-title">Create New Project</h3>
+      <button type="button" class="close-button" (click)="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+        <!-- Project Name -->
+        <div class="form-group">
+          <label for="projectName">Project Name</label>
+          <input
+            type="text"
+            id="projectName"
+            formControlName="name"
+            class="form-control"
+            placeholder="Enter project name"
+            [ngClass]="{'is-invalid': projectForm.get('name')?.invalid && projectForm.get('name')?.touched}"
+          >
+          <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched" class="invalid-feedback">
+            <div *ngIf="projectForm.get('name')?.errors?.['required']">Project name is required</div>
+            <div *ngIf="projectForm.get('name')?.errors?.['maxlength']">Project name must be less than 50 characters</div>
+          </div>
+        </div>
+
+        <!-- Project Description -->
+        <div class="form-group">
+          <label for="projectDescription">Description</label>
+          <textarea
+            id="projectDescription"
+            formControlName="description"
+            class="form-control"
+            rows="3"
+            placeholder="Enter project description"
+            [ngClass]="{'is-invalid': projectForm.get('description')?.invalid && projectForm.get('description')?.touched}"
+          ></textarea>
+          <div *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched" class="invalid-feedback">
+            <div *ngIf="projectForm.get('description')?.errors?.['required']">Description is required</div>
+            <div *ngIf="projectForm.get('description')?.errors?.['maxlength']">Description must be less than 255 characters</div>
+          </div>
+        </div>
+
+        <!-- Project Status -->
+        <div class="form-group">
+          <label for="projectStatus">Status</label>
+          <select id="projectStatus" formControlName="status" class="form-control">
+            <option value="ACTIVE">Active</option>
+            <option value="PLANNED">Planned</option>
+            <option value="ON_HOLD">On Hold</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <!-- Project Due Date -->
+        <div class="form-group">
+          <label for="projectDueDate">Due Date</label>
+          <input
+            type="datetime-local"
+            id="projectDueDate"
+            formControlName="dueDate"
+            class="form-control"
+            [ngClass]="{'is-invalid': projectForm.get('dueDate')?.invalid && projectForm.get('dueDate')?.touched}"
+          >
+          <div *ngIf="projectForm.get('dueDate')?.invalid && projectForm.get('dueDate')?.touched" class="invalid-feedback">
+            <div *ngIf="projectForm.get('dueDate')?.errors?.['required']">Due date is required</div>
+          </div>
+        </div>
+
+        <!-- Project Icon Selection -->
+        <div class="form-group">
+          <label>Project Icon</label>
+          <div class="icon-selection">
+            <div *ngFor="let icon of defaultIcons"
+                 class="icon-option"
+                 [ngClass]="{'selected': selectedIcon === icon}"
+                 (click)="selectIcon(icon)">
+              {{ icon }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Color Selection -->
+        <div class="form-group">
+          <label>Project Color</label>
+          <div class="color-selection">
+            <div *ngFor="let color of defaultColors"
+                 class="color-option"
+                 [style.backgroundColor]="color"
+                 [ngClass]="{'selected': selectedColor === color}"
+                 (click)="selectColor(color)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="form-group">
+          <label>Preview</label>
+          <div class="project-preview">
+            <div class="preview-icon" [style.backgroundColor]="selectedColor">
+              {{ selectedIcon }}
+            </div>
+            <div class="preview-name">{{ projectForm.get('name')?.value || 'New Project' }}</div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Actions -->
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner"></span>
+            <span>{{ isSubmitting ? 'Creating...' : 'Create Project' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
