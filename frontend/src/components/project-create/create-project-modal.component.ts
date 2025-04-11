@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService, Project } from '../../app/shared/services/project_service.service';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { modalAnimations } from '../../app/shared/animations/animations';
 
 @Component({
   selector: 'app-create-project-modal',
@@ -11,24 +11,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   templateUrl: './create-project-modal.component.html',
   styleUrls: ['./create-project-modal.component.css'],
   animations: [
-    trigger('modalAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-20px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-20px)' }))
-      ])
-    ]),
-    trigger('backdropAnimation', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('300ms ease-out', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('200ms ease-in', style({ opacity: 0 }))
-      ])
-    ])
+    modalAnimations.modalAnimation,
+    modalAnimations.backdropAnimation
   ]
 })
 export class CreateProjectModalComponent {

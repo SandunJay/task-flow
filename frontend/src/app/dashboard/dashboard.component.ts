@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
     this.authService.logout()
-    useAuthStore.getState().setAuthenticated(true);
+    useAuthStore.getState().setAuthenticated(false);
   }
 
   toggleTheme(): void {

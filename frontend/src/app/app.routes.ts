@@ -11,7 +11,7 @@ import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { Component } from '@angular/core';
 
 @Component({
-  template: '' 
+  template: ''
 })
 export class EmptyComponent {}
 
@@ -19,7 +19,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: EmptyComponent, 
+    component: EmptyComponent,
   },
   // Auth routes
   {
@@ -59,22 +59,22 @@ export const routes: Routes = [
       {
         path: 'project-board',
         component: ProjectBoardComponent,
-        data: { animation: 'projectBoard' } 
+        data: { animation: 'projectBoard' }
       },
       {
         path: 'project-board/:id',
         component: ProjectBoardComponent,
-        data: { animation: 'projectBoardDetail' } 
+        data: { animation: 'projectBoardDetail' }
       },
       {
         path: 'notes',
         component: NotesSectionComponent,
-        data: { animation: 'notes' } 
+        data: { animation: 'notes' }
       }
     ]
   },
-  { 
-    path: '**', 
-    redirectTo: '' // Redirect to landing 
+  {
+    path: '**',
+    redirectTo: '' // Redirect to landing
   }
 ];

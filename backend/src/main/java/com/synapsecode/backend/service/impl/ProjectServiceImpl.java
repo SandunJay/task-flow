@@ -1,5 +1,6 @@
 package com.synapsecode.backend.service.impl;
 
+import com.synapsecode.backend.repository.UserRepository;
 import com.synapsecode.backend.service.ProjectService;
 
 import com.synapsecode.backend.dto.ProjectRequest;
@@ -24,6 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
     public static final String PROJECT = "Project";
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -41,10 +43,21 @@ public class ProjectServiceImpl implements ProjectService {
         return projectMapper.toResponse(project);
     }
 
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<ProjectResponse> getAllProjects(User currentUser) {
+//        List<Project> projects = projectRepository.findByCreatedBy(currentUser);
+//        return projects.stream()
+//                .map(projectMapper::toResponse)
+//                .toList();
+//    }
+
     @Override
     @Transactional(readOnly = true)
     public List<ProjectResponse> getAllProjects(User currentUser) {
-        List<Project> projects = projectRepository.findByCreatedBy(currentUser);
+        User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User","Id", currentUser.getId()));
+        List<Project> projects = projectRepository.findAll();
         return projects.stream()
                 .map(projectMapper::toResponse)
                 .toList();

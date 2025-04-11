@@ -1,20 +1,12 @@
 import { Component, Input, Output, EventEmitter, HostListener, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../../app/shared/theme/theme.service';
 import { CreateProjectModalComponent } from '../project-create/create-project-modal.component';
 import { ProjectService, Project } from '../../app/shared/services/project_service.service';
-
-
-interface ProjectItem {
-  id: number;
-  name: string;
-  icon: string;
-  color: string;
-  selected?: boolean;
-  notifications?: number;
-}
+import { Router } from '@angular/router';
+import { ProjectItem, NavItem, DEFAULT_NAV_ITEMS, SAMPLE_PROJECTS } from '../../app/shared/models/nav.model';
+import { sidebarAnimations } from '../../app/shared/animations/animations';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,35 +15,10 @@ interface ProjectItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('300ms', style({ opacity: 1 }))
-      ])
-    ]),
-    trigger('rotateIcon', [
-      state('true', style({ transform: 'rotate(180deg)' })),
-      state('false', style({ transform: 'rotate(0deg)' })),
-      transition('true <=> false', animate('300ms ease-in-out'))
-    ]),
-    trigger('highlightAnimation', [
-      state('inactive', style({
-        background: 'transparent'
-      })),
-      state('active', style({
-        background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 100%)'
-      })),
-      transition('inactive <=> active', animate('300ms ease-in-out'))
-    ]),
-    trigger('pulseAnimation', [
-      state('inactive', style({
-        transform: 'scale(1)'
-      })),
-      state('active', style({
-        transform: 'scale(1.1)'
-      })),
-      transition('inactive <=> active', animate('300ms ease-in-out'))
-    ])
+    sidebarAnimations.fadeIn,
+    sidebarAnimations.rotateIcon,
+    sidebarAnimations.highlightAnimation,
+    sidebarAnimations.pulseAnimation
   ]
 })
 export class SidebarComponent implements OnInit, OnDestroy {
@@ -70,10 +37,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private themeSubscription?: Subscription;
   private projectSubscription?: Subscription;
 
+  // Navigation and projects data
+  projects: ProjectItem[] = [];
+  navItems: NavItem[] = DEFAULT_NAV_ITEMS;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private themeService: ThemeService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private router: Router
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
@@ -104,22 +76,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.projectSubscription.unsubscribe();
     }
   }
-
-  // Sample project data - will be replaced with API data
-  projects: ProjectItem[] = [
-    { id: 1, name: 'Piper Enterprise', icon: '📄', color: '#4d6fff', selected: true, notifications: 3 },
-    { id: 2, name: 'Web platform', icon: '🌐', color: '#1ecbe1' },
-    { id: 3, name: 'Mobile Loop', icon: '📱', color: '#6c757d', notifications: 1 },
-    { id: 4, name: 'Wiro Mobile App', icon: '📱', color: '#800080' }
-  ];
-
-  navItems = [
-    { icon: '📊', label: 'Dashboard' },
-    { icon: '📅', label: 'Calendar' },
-    { icon: '📈', label: 'Reports' },
-    { icon: '💬', label: 'Messages' },
-    { icon: '❓', label: 'Help' }
-  ];
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -153,6 +109,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   selectProject(project: ProjectItem): void {
     this.projects.forEach(p => p.selected = false);
     project.selected = true;
+
+    this.router.navigate(['/project-board', project.id]);
   }
 
   setAnimState(element: string, state: 'active' | 'inactive') {
@@ -193,31 +151,62 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.projectSubscription = this.projectService.getProjects().subscribe({
-      next: (response) => {
-        // Map API projects to ProjectItem objects for the sidebar
-        if (response && response.content) {
-          this.projects = response.content.map(p => ({
+      next: (projects) => {
+        console.log('Projects loaded:', projects);
+        if (projects && Array.isArray(projects)) {
+          this.projects = projects.map(p => ({
             id: p.id || 0,
             name: p.name,
             icon: p.icon || '📄', // Default icon if not present
-            color: p.color || '#4d6fff', // Default color if not present
+            color: this.getProjectColor(p), // Generate color based on project name
             selected: false,
-            notifications: 0 // Default no notifications
+            notifications: p.tasks?.length || 0
           }));
 
-          // Select the first project by default if any exist
           if (this.projects.length > 0) {
             this.projects[0].selected = true;
           }
+        } else {
+          console.error('Expected an array of projects but got:', projects);
+          // Use sample projects as fallback
+          this.projects = SAMPLE_PROJECTS;
         }
       },
       error: (error) => {
         console.error('Failed to load projects:', error);
-        // Keep the default projects as fallback
+        // Use sample projects as fallback
+        this.projects = SAMPLE_PROJECTS;
       },
       complete: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  /**
+   * Generate a consistent color based on project name or use a default if provided
+   */
+  private getProjectColor(project: any): string {
+    if (project.color) return project.color;
+
+    // Generate a deterministic color based on project name
+    const colors = [
+      '#4d6fff', // blue
+      '#1ecbe1', // cyan
+      '#6c757d', // gray
+      '#800080', // purple
+      '#28a745', // green
+      '#dc3545', // red
+      '#ffc107', // yellow
+      '#ff9500', // orange
+      '#343a40'  // dark
+    ];
+
+    // Simple hash function to get a consistent index
+    const hash: number = project.name.split('').reduce(
+      (acc: number, char: string) => acc + char.charCodeAt(0), 0
+    );
+
+    return colors[hash % colors.length];
   }
 }
